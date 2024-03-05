@@ -1,0 +1,24 @@
+.LeftNavbar-container{
+    display: flex;
+    flex-direction: column;
+    max-width: 270px;
+    background-color: 	#032f3c;
+    height: 100vh;
+    color:  #39FF14;
+    font-size: 20px;
+    border-right: 1px solid black;
+    justify-content: flex-start;
+    font-family: Montserrat;
+    font-weight: 500;
+   
+}
+.nav-contents{
+
+    border-bottom: 1px solid whitesmoke;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+   
+}
