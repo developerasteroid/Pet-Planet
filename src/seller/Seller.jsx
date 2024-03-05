@@ -2,8 +2,8 @@ import React from 'react'
 // import RegistrationForm from './RegistrationForm'
 import TopNavbar from './TopNAvbar'
 import LeftNavbar from './LeftNavbar'
-import APCategoryComponent from './APCategoryComponent'
 import './css/Seller.css'
+import APPage from './APPage'
 
 function Seller() {
   return (
@@ -12,7 +12,7 @@ function Seller() {
     <TopNavbar/>
     <div className="container">
       <LeftNavbar/>
-      <APCategoryComponent/>
+      <APPage/>
     </div>
     </>
   )

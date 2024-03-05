@@ -1,7 +1,7 @@
 .LeftNavbar-container{
     display: flex;
     flex-direction: column;
-    max-width: 270px;
+    width: 300px;
     background-color: 	#032f3c;
     height: 100vh;
     color:  #39FF14;

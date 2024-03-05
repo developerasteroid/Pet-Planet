@@ -10,6 +10,7 @@
     font-size: 20px;
     font-weight: 600;
     position: sticky;
+    z-index: 200;
     top: 0;
     left: 0;
 
