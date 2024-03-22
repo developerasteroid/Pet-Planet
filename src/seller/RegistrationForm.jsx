@@ -224,7 +224,7 @@ const RegistrationForm = () => {
           onChange={handleInputChange}
           required
         />
-        {showOtpCounter? <div className='counter'><Counter seconds={120} callback={()=>{setOtpSendDisable(false); setShowOtpCounter(false)}}/></div> : <div className='otp-button' onClick={sendOtp}>Send OTP</div>}
+        {showOtpCounter? <div className='counter'><Counter seconds={120} callback={()=>{setOtpSendDisable(false); setShowOtpCounter(false)}}/></div> : <div className={'otp-button ' + (otpSendDisable? 'freeze-btn' : '')} onClick={sendOtp}>Send OTP</div>}
         <input
           type="text"
           id='sellerOtp'
