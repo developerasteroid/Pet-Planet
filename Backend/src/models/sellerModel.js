@@ -61,7 +61,7 @@ sellerSchema.pre('save', async function(next) {
     if (!seller.isModified('password')) return next();
 
     try {
-        const salt = await bcrypt.genSalt(10);
+        const salt = await bcrypt.genSalt(process.env.bcryptSalt);
         const hash = await bcrypt.hash(seller.password, salt);
         seller.password = hash;
         next();
@@ -69,5 +69,14 @@ sellerSchema.pre('save', async function(next) {
         next(error);
     }
 });
+
+// Method to compare password during login
+sellerSchema.methods.comparePassword = async function(candidatePassword) {
+    try {
+        return await bcrypt.compare(candidatePassword, this.password);
+    } catch (error) {
+        throw error;
+    }
+};
 
 module.exports = mongoose.model('Seller', sellerSchema);

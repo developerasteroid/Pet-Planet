@@ -3,6 +3,8 @@ const router = express();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const {SellerSendOtp, RegisterSeller, LoginSeller, AdminLogin} = require('./../controllers/authController');
+
 
 
 
@@ -17,10 +19,11 @@ const sellerProfileStorage = multer.diskStorage({
 
 const uploadSellerProfile = multer({ storage: sellerProfileStorage});
 
-const {SellerSendOtp, RegisterSeller} = require('./../controllers/authController');
 
 router.post('/seller/sendotp', SellerSendOtp);
-
 router.post('/seller/register', uploadSellerProfile.single('photo'), RegisterSeller);
+router.post('/seller/login', LoginSeller);
+
+router.post('/admin/login', AdminLogin);
 
 module.exports = router;

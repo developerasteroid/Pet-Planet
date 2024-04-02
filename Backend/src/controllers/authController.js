@@ -3,7 +3,7 @@ const SellerEmailOtp = require('./../models/sellerEmailOtpModel');
 const nodemailer = require('nodemailer');
 const dns = require('dns');
 const fs = require('fs');
-const { log } = require('console');
+const jwt = require('jsonwebtoken');
 
 const sellerRigisterOtpExpireTime = 30 * 60 * 1000; // 30 minutes to milliseconds
 
@@ -125,7 +125,7 @@ const SellerSendOtp = async(req, res) => {
 
         
     } catch (error) {
-        console.error(error);
+        console.error("Error in SellerSendOtp:" + error.message);
         res.status(500).json({message: 'Internal server error'});
     }
 }
@@ -203,10 +203,70 @@ const RegisterSeller = async(req, res) => {
         res.status(200).json({message: 'Success! Your registration is complete.'});
         
     } catch (error) {
-        console.error(error);
+        console.error("Error in RegisterSeller:" + error.message);
         res.status(500).json({message: 'Internal server error'});
     }
 }
 
+const LoginSeller = async(req, res) => {
+    try {
+        const {email, password} = req.body;
+        if(!email){
+            return res.status(400).json({message:"Email is Missing"});
+        }
+        if(!password){
+            return res.status(400).json({message:"Password is Missing"});
+        }
 
-module.exports = {RegisterSeller, SellerSendOtp};
+        // Find the seller by email
+        const seller = await Seller.findOne({ email });
+
+        if (!seller) {
+            // Seller with the provided email does not exist
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Compare the provided password with the hashed password stored in the database
+        const isPasswordValid = await seller.comparePassword(password);
+
+        if (!isPasswordValid) {
+            // Password is incorrect
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        if (!seller.isApproved) {
+            // Seller account is not yet approved, send 403 Forbidden status
+            return res.status(403).json({ message: 'Seller account is not yet approved' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ _id: seller._id, type: "seller" }, process.env.jwt_secret, { expiresIn: '1d' });
+
+        res.json({token});
+    } catch (error) {
+        console.error("Error in LoginSeller:" + error.message);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+const AdminLogin = async(req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        if(!email){
+            return res.status(400).json({message:"Email is Missing"});
+        }
+        if(!password){
+            return res.status(400).json({message:"Password is Missing"});
+        }
+        
+        // console.log(process.env.ADMIN_EMAIL);
+        // console.log(process.env.ADMIN_PASSWORD);
+        res.send("ok");
+    } catch (error) {
+        console.error("Error in AdminLogin:" + error.message);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+module.exports = {RegisterSeller, SellerSendOtp, LoginSeller, AdminLogin};
