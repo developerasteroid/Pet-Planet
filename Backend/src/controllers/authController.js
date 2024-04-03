@@ -259,10 +259,24 @@ const AdminLogin = async(req, res) => {
         if(!password){
             return res.status(400).json({message:"Password is Missing"});
         }
+
+
+        if(email != process.env.ADMIN_EMAIL){
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        let isPasswordValid = await bcrypt.compare(password, process.env.ADMIN_PASSWORD);
+
+        if(!isPasswordValid){
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ email: process.env.ADMIN_EMAIL, type: "admin" }, process.env.jwt_secret, { expiresIn: '1d' });
+
+        res.json({token});
         
-        // console.log(process.env.ADMIN_EMAIL);
-        // console.log(process.env.ADMIN_PASSWORD);
-        res.send("ok");
+        
     } catch (error) {
         console.error("Error in AdminLogin:" + error.message);
         res.status(500).json({message: 'Internal server error'});
