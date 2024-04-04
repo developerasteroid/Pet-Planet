@@ -1,0 +1,76 @@
+/* LoginForm.css */
+
+.LoginMainContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(241, 239, 239);
+}
+
+.LoginFormContainer {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.LoginFormTitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.LoginInputField {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.LoginSubmitButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.LoginSubmitButton:hover {
+  background-color: #0056b3;
+}
+
+.LoginDiv {
+  margin-top: 10px;
+}
+
+.LoginLink {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.LoginLink:hover {
+  text-decoration: underline;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .LoginFormContainer {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .LoginFormContainer {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .LoginFormContainer {
+    width: 95%;
+  }
+}

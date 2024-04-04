@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+// import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import './css/RegistrationForm.css';
 import Counter from '../component/Counter';
@@ -310,7 +311,12 @@ const RegistrationForm = () => {
         />
         <label className='accept-terms'>Accept <a href="">Terms</a> and <a href="">conditions</a></label>
         </div>
-        <button type="submit" className={"submit-button " + (submitDisable? 'freeze-btn' : '')} disabled={submitDisable}>Register</button>
+        <div className='lastPart'>
+          <button type="submit" className={"submit-button " + (submitDisable? 'freeze-btn' : '')} disabled={submitDisable}>Register</button>
+          <div>Already Registered? Login</div> 
+        </div>
+        
+        
       </form>
     </div>
     </div>

@@ -4,11 +4,13 @@ import TopNavbar from './TopNAvbar'
 import LeftNavbar from './LeftNavbar'
 import './css/Seller.css'
 import APPage from './APPage'
+import LoginForm from './LoginForm'
 
 function Seller() {
   return (
     <>
     <RegistrationForm/>
+    {/* <LoginForm/> */}
     {/* <TopNavbar/>
     <div className="container">
       <LeftNavbar/>
