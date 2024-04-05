@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './css/RegistrationForm.css';
 import Counter from '../component/Counter';
 
-const RegistrationForm = () => {
+const SellerRegister = () => {
   const [alertMessage, setAlertMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [otpSendDisable, setOtpSendDisable] = useState(false);
@@ -324,4 +324,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default SellerRegister;
