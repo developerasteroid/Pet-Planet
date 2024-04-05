@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const dns = require('dns');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const sellerRigisterOtpExpireTime = 30 * 60 * 1000; // 30 minutes to milliseconds
 
@@ -200,7 +201,6 @@ const RegisterSeller = async(req, res) => {
         }
         const sellerSave = new Seller({fullName, shopName, email, password, dateOfBirth, mobileNumber, profileImageUrl, adharNumber, bankAccountNumber});
         await sellerSave.save();
-        console.log('reach');
     
         res.status(200).json({message: 'Success! Your registration is complete.'});
         

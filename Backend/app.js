@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', require('./src/routes/authRoutes'));
+app.use('/api/admin', require('./src/routes/adminRoutes'));
 
 
 app.listen(PORT, () =>{

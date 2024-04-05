@@ -1,14 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const sellerSchema = new mongoose.Schema({
+const customerSchema = new mongoose.Schema({
     fullName: {
         type:String,
         required:true
-    },
-    shopName: {
-        type:String,
-        default:null
     },
     email: {
         type:String,
@@ -32,42 +28,58 @@ const sellerSchema = new mongoose.Schema({
         type:String,
         default:null
     },
-    adharNumber: {
+    place:{
+        type:String,
+        require:true
+    },
+    pinCode:{
+        type:String,
+        require:true
+    },
+    landMark:{
+        type:String,
+        require:true
+    },
+    doorNumber:{
+        type:String,
+        require:true
+    },
+    state:{
+        type:String,
+        require:true
+    },
+    district:{
+        type:String,
+        require:true
+    },
+    taluk:{
+        type:String,
+        require:true
+    },
+    village: {
         type:String,
         required:true
     },
     bankAccountNumber: {
         type:String,
-        required:true
+        default: null
     },
     isBlocked: {
         type:Boolean,
         default: false
-    },
-    isVerified: {
-        type: Boolean,
-        default: false
-    },
-    isApproved: {
-        type: Boolean,
-        default: false
-    },
-    wallet: {
-        type: Number,
-        default: 0
     }
 }, {timestamps:true});
 
 
 // Hash the password before saving it to the database
-sellerSchema.pre('save', async function(next) {
-    const seller = this;
-    if (!seller.isModified('password')) return next();
+customerSchema.pre('save', async function(next) {
+    const customer = this;
+    if (!customer.isModified('password')) return next();
 
     try {
         const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(seller.password, salt);
-        seller.password = hash;
+        const hash = await bcrypt.hash(customer.password, salt);
+        customer.password = hash;
         next();
     } catch (error) {
         next(error);
@@ -75,7 +87,7 @@ sellerSchema.pre('save', async function(next) {
 });
 
 // Method to compare password during login
-sellerSchema.methods.comparePassword = async function(candidatePassword) {
+customerSchema.methods.comparePassword = async function(candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
     } catch (error) {
@@ -83,4 +95,4 @@ sellerSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
-module.exports = mongoose.model('Seller', sellerSchema);
+module.exports = mongoose.model('Customer', customerSchema);
