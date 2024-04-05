@@ -9,13 +9,13 @@ import LoginForm from './LoginForm'
 function Seller() {
   return (
     <>
-    <RegistrationForm/>
+    {/* <RegistrationForm/> */}
     {/* <LoginForm/> */}
-    {/* <TopNavbar/>
+    <TopNavbar/>
     <div className="container">
       <LeftNavbar/>
       <APPage/>
-    </div> */}
+    </div>
     </>
   )
 }

@@ -181,6 +181,7 @@ const RegisterSeller = async(req, res) => {
             await DeleteFile(profilePhotoPath);
             return res.status(400).json({message: 'Seller with this email already exists'});
         }
+        
 
         const currentTime = Date.now();
         const expiryTime = sellerOtpInfo.createdAt.getTime() + sellerRigisterOtpExpireTime;
@@ -199,6 +200,7 @@ const RegisterSeller = async(req, res) => {
         }
         const sellerSave = new Seller({fullName, shopName, email, password, dateOfBirth, mobileNumber, profileImageUrl, adharNumber, bankAccountNumber});
         await sellerSave.save();
+        console.log('reach');
     
         res.status(200).json({message: 'Success! Your registration is complete.'});
         

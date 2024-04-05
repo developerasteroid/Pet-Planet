@@ -61,7 +61,7 @@ sellerSchema.pre('save', async function(next) {
     if (!seller.isModified('password')) return next();
 
     try {
-        const salt = await bcrypt.genSalt(process.env.bcryptSalt);
+        const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(seller.password, salt);
         seller.password = hash;
         next();

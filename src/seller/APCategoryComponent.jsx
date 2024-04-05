@@ -1,36 +1,30 @@
-import React from 'react'
-import './css/APCategoryComponent.css'
+import React from 'react';
+import './css/APCategoryComponent.css';
 import PropTypes from 'prop-types';
-import delta from './assets/delta.png'
+import delta from './assets/delta.png';
 
 const APCategoryComponent = (props) => {
   return (
-             <div className="category-container">
+    <div className="category-container">
+      <div className="category-img">
+        <img src={props.img} alt="" className="img" />
+      </div>
+      <h1>{props.title}</h1>
+      <p>{props.text}</p>
+    </div>
+  );
+};
 
-                    <div className="category-img">
-                        <img src={props.img} alt="" className='img' />
-                    </div>
-                    <h1>{props.title}</h1>
-                    <p>{props.text}</p>
-            </div>
-     
-  )
-}
-
-APCategoryComponent.propTypes ={
+APCategoryComponent.propTypes = {
   img: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired
-}
+  text: PropTypes.string.isRequired,
+};
 
 APCategoryComponent.defaultProps = {
   img: delta,
   title: 'default',
-  text: 'Default'
-}
+  text: 'Default',
+};
 
-
-export default APCategoryComponent
-
-
-
+export default APCategoryComponent;

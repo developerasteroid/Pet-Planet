@@ -2,9 +2,9 @@ import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./css/LoginForm.css"
+import "./css/AdminLogin.css"
 
-const LoginForm = () => {
+const AdminLogin = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -24,16 +24,16 @@ const LoginForm = () => {
   return (
     <>
       <ToastContainer />
-      <div className="LoginMainContainer">
-        <div className="LoginFormContainer">
-          <h2 className="LoginFormTitle">Login</h2>
+      <div className="AdminLoginMainContainer">
+        <div className="AdminLoginFormContainer">
+          <h2 className="AdminLoginFormTitle">Admin Login</h2>
           <form onSubmit={handleSubmit}>
             <label htmlFor="loginEmail">Email:</label>
             <input
               type="email"
               id="loginEmail"
               name="email"
-              className="LoginInputField"
+              className="AdminLoginInputField"
               placeholder="Email"
               value={formData.email}
               onChange={handleInputChange}
@@ -44,18 +44,15 @@ const LoginForm = () => {
               type="password"
               id="loginPassword"
               name="password"
-              className="LoginInputField"
+              className="AdminLoginInputField"
               placeholder="Password"
               value={formData.password}
               onChange={handleInputChange}
               required
             />
-            <button type="submit" className="LoginSubmitButton">
+            <button type="submit" className="AdminLoginSubmitButton">
               Login
             </button>
-            <div className="LoginDiv">
-              Don't have an account? Register
-            </div>
           </form>
         </div>
       </div>
@@ -63,6 +60,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
-
-
+export default AdminLogin;
