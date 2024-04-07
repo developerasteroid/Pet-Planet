@@ -285,4 +285,4 @@ const AdminLogin = async(req, res) => {
     }
 }
 
-module.exports = {RegisterSeller, SellerSendOtp, LoginSeller, AdminLogin};
+module.exports = {RegisterSeller, SellerSendOtp, LoginSeller, AdminLogin, SendMail};
