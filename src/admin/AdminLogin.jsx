@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./css/AdminLogin.css"
+import adminAxiosInstance from "../api/adminAxios";
 
 const AdminLogin = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -15,10 +17,22 @@ const AdminLogin = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Implement login logic here
-    console.log(formData);
+    if(isSubmitted){
+      return;
+    }
+    setIsSubmitted(true);
+    try {
+      const response = await adminAxiosInstance.post('api/auth/admin/login', formData);
+      if(response.status === 200){
+        console.log(response);
+      }
+      setIsSubmitted(false);
+    } catch (error) {
+      console.log(error);
+      setIsSubmitted(false);
+    }
   };
 
   return (
@@ -50,7 +64,7 @@ const AdminLogin = () => {
               onChange={handleInputChange}
               required
             />
-            <button type="submit" className="AdminLoginSubmitButton">
+            <button type="submit" className="AdminLoginSubmitButton" disabled={isSubmitted}>
               Login
             </button>
           </form>

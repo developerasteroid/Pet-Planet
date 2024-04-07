@@ -4,8 +4,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/RegistrationForm.css';
 import Counter from '../component/Counter';
+import {useNavigate} from 'react-router-dom';
 
 const SellerRegister = () => {
+  const navigate = useNavigate();
   const [alertMessage, setAlertMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [otpSendDisable, setOtpSendDisable] = useState(false);
@@ -313,7 +315,7 @@ const SellerRegister = () => {
         </div>
         <div className='lastPart'>
           <button type="submit" className={"submit-button " + (submitDisable? 'freeze-btn' : '')} disabled={submitDisable}>Register</button>
-          <div>Already Registered? Login</div> 
+          <div onClick={()=>{navigate('/seller/login')}}>Already Registered? Login</div> 
         </div>
         
         
