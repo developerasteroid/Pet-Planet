@@ -1,0 +1,65 @@
+.AdminTopNavbar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    background-color: #efd6a6; /* Light background color */
+    color: #333333; /* Dark text color */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Matching font-family with LeftNavbar */
+    font-size: 20px;
+    font-weight: 600;
+    position: sticky;
+    z-index: 200;
+    top: 0;
+    left: 0;
+  }
+  
+  .Adminleft-content img {
+    width: 80px;
+  }
+  
+  .Adminleft-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+  }
+  
+  .Adminright-content {
+    margin-right: 20px; /* Adjusted margin for better alignment */
+  }
+  
+  .Adminmiddle-content {
+    margin-right: auto; /* Auto margin to push the content to the left */
+  }
+  
+  .Adminprofile {
+    height: 55px;
+    width: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    background-color: #39ff14; /* Matching background color with LeftNavbar */
+    color: #f2f2f2; /* Adjusted text color to contrast with background */
+  }
+  
+  @media screen and (max-width: 768px) {
+    .Adminleft-content img {
+      width: 60px; /* Decreased logo size for smaller screens */
+    }
+  
+    .Adminleft-content {
+      margin-left: 10px; /* Adjusted margin for smaller screens */
+    }
+  
+    .Adminmiddle-content {
+      display: none; /* Hide middle content on smaller screens */
+    }
+  
+    .Adminright-content {
+      margin-right: 10px; /* Adjusted margin for smaller screens */
+    }
+  }
+  

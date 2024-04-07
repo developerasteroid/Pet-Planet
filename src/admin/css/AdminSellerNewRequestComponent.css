@@ -1,0 +1,16 @@
+/* .admin-SellerNewRequestComponent-container{
+
+} */
+.admin-sellerProfile {
+    width: 300px; /* Define width of the container */
+    height: 200px; /* Define height of the container */
+    display: flex; /* Use flexbox to center the image */
+    justify-content: center; /* Center the image horizontally */
+    align-items: center; /* Center the image vertically */
+  }
+
+  .admin-sellerProfile img {
+    max-width: 100%; /* Ensure the image doesn't exceed the container width */
+    max-height: 100%; /* Ensure the image doesn't exceed the container height */
+    border: 1px solid #ccc; /* Add border around the image */
+  }
