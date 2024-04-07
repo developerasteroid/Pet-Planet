@@ -1,0 +1,14 @@
+.error-page {
+    text-align: center;
+    height: 100vh;
+    height: 100svh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error-page-message {
+    font-size: 24px;
+}
+.error-page * {
+    margin: 6px
+}

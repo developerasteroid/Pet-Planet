@@ -242,7 +242,7 @@ const LoginSeller = async(req, res) => {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ _id: seller._id, type: "seller" }, process.env.jwt_secret, { expiresIn: '1d' });
+        const token = jwt.sign({ _id: seller._id, type: "seller" }, process.env.jwt_secret, { expiresIn: '2h' });
 
         res.json({token});
     } catch (error) {
@@ -274,7 +274,7 @@ const AdminLogin = async(req, res) => {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ email: process.env.ADMIN_EMAIL, type: "admin" }, process.env.jwt_secret, { expiresIn: '1d' });
+        const token = jwt.sign({ email: process.env.ADMIN_EMAIL, type: "admin" }, process.env.jwt_secret, { expiresIn: '2h' });
 
         res.json({token});
         
