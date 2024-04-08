@@ -6,6 +6,7 @@ import './css/SellerAddPet.css';
 const SellerAddPet = () => {
     const [formData, setFormData] = useState({
       petType: '',
+      petBreed:'',
       age: '',
       quantity: '',
       gender: '',
@@ -68,6 +69,39 @@ const SellerAddPet = () => {
                 <option value="">Select</option>
                 <option value="Dog">Dog</option>
                 <option value="Cat">Cat</option>
+              </select>
+
+              <label htmlFor="petBreed">Select Breed:</label>
+              <select
+                name="petBreed"
+                id="petBreed"
+                className="pet-input-field"
+                value={formData.petBreed}
+                onChange={handleInputChange}
+                required
+              >
+                {formData.petType === 'Dog' && 
+                <>
+                <option value="">Select</option>
+                <option value="German_Shepherd">German-Shepherd</option>
+                <option value="Bulldog">Bulldog</option>
+                <option value="Labrador_Retriever">Labrador-Retriever</option>
+                <option value="Golden_Retriever">Golden-Retriever</option>
+                <option value="Pug">Pug</option>
+                <option value="other">other</option>
+                </>
+                }
+                  {formData.petType === 'Cat' && 
+                <>
+                <option value="">Select</option>
+                <option value="Persian">Persian</option>
+                <option value="Himalayan-Perisan">Himalayan-Perisan</option>
+                <option value="other">other</option>
+                
+                </>
+                }
+                
+
               </select>
   
               <label htmlFor="age">Age:</label>
