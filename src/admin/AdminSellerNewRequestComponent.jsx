@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types';
 import './css/AdminSellerNewRequestComponent.css';
 import { toast } from "react-toastify";
@@ -8,7 +8,13 @@ import adminAxiosInstance from '../helper/adminAxios';
 
 
 const AdminSellerNewRequestComponent = (props) => {
+  const isClicked = useRef(false);
+
   const updateApproval = async(sellerID, action) => {
+    if(isClicked.current){
+      return;
+    }
+    isClicked.current = true;
     try {
       const response = await adminAxiosInstance.post('api/admin/new/registered/seller/update', {sellerID, action});
       if(response.status === 200 && response.data && response.data.message){
@@ -34,6 +40,7 @@ const AdminSellerNewRequestComponent = (props) => {
         toast.error(error.message);
       }
     }
+    isClicked.current = false;
   }
   return (
     <div className='admin-SellerNewRequestComponent-container'>
