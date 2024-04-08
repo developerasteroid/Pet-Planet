@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./css/AdminLogin.css"
-import adminAxiosInstance from "../api/adminAxios";
+import adminAxiosInstance from "../helper/adminAxios";
+import {useNavigate} from 'react-router-dom';
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -25,12 +27,19 @@ const AdminLogin = () => {
     setIsSubmitted(true);
     try {
       const response = await adminAxiosInstance.post('api/auth/admin/login', formData);
-      if(response.status === 200){
-        console.log(response);
+      if(response.status === 200 && response.data.token){
+        localStorage.setItem('adminToken', response.data.token);
+        navigate('/admin', {replace: true});
+      } else {
+        throw new Error("Not able to Login. Server Error");
       }
       setIsSubmitted(false);
     } catch (error) {
-      console.log(error);
+      if(error.response && error.response.data && error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
       setIsSubmitted(false);
     }
   };

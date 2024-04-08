@@ -1,10 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types';
-import './css/AdminSellerNewRequestComponent.css'
+import './css/AdminSellerNewRequestComponent.css';
+import { toast } from "react-toastify";
+import adminAxiosInstance from '../helper/adminAxios';
+
 
 
 
 const AdminSellerNewRequestComponent = (props) => {
+  const updateApproval = async(sellerID, action) => {
+    try {
+      const response = await adminAxiosInstance.post('api/admin/new/registered/seller/update', {sellerID, action});
+      if(response.status === 200 && response.data && response.data.message){
+          if(action){
+            toast.success(response.data.message);
+          } else {
+            toast.warning(response.data.message);
+          }
+          props.removeCallback();
+      } else {
+        throw new Error('Error in fetching new sellers list');
+      }
+    } catch (error) {
+      if(error.response){
+        if(error.response.status === 401){
+          navigate('/admin/login', {replace: true});
+        } else if(error.response.data && error.response.data.message){
+          toast.error(error.response.data.message);
+        } else {
+            toast.error(error.message);
+        }
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
   return (
     <div className='admin-SellerNewRequestComponent-container'>
 
@@ -24,8 +54,8 @@ const AdminSellerNewRequestComponent = (props) => {
         </div>
 
         <div className="AdminButton-container">
-          <button className='Admin-btn-rccept'>Accept</button>
-          <button className='Admin-btn-reject'>Decline</button>
+          <button className='Admin-btn-rccept' onClick={()=>{updateApproval(props.sellerID, true)}}>Accept</button>
+          <button className='Admin-btn-reject' onClick={()=>{updateApproval(props.sellerID, false)}}>Decline</button>
         </div>
       
     </div>

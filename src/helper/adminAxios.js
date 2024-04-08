@@ -32,6 +32,6 @@ adminAxiosInstance.interceptors.response.use(
       // Do something with response error
       return Promise.reject(error);
     }
-  );
+);
 
 export default adminAxiosInstance;
