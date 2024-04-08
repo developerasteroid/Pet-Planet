@@ -1,0 +1,57 @@
+.pet-mainContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the top */
+  min-height: calc(100vh - 200px); /* Set a minimum height */
+  margin-top: 5px;
+  padding-top: 20px; /* Add padding instead of margin to keep margin consistent */
+  box-sizing: border-box; /* Include padding in height calculation */
+}
+
+.pet-form-container {
+  width: 80%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+
+.pet-form-title {
+  text-align: center;
+}
+
+.pet-input-field {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.pet-radio {
+  margin-bottom: 15px;
+}
+
+.pet-checkbox {
+  margin-bottom: 15px;
+}
+
+.pet-submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pet-submit-button:hover {
+  background-color: #0056b3;
+}
+
+@media screen and (max-width: 768px) {
+  .pet-form-container {
+      width: 90%;
+  }
+}

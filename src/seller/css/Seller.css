@@ -1,5 +1,17 @@
-.container{
+.container {
     display: flex;
-    flex-direction: row;
+  }
   
-}
+  .scrollable-content {
+    flex: 1; /* Allow content to take up remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: calc(100vh - 64px); /* Adjust height as needed, minus height of top navbar */
+    padding-right: 20px; /* Add padding to avoid content being hidden behind vertical scrollbar */
+  }
+  
+  .scrollable-content-inner {
+    padding: 20px; /* Add padding for content spacing */
+  }
+  
+  /* Rest of your CSS remains unchanged */
+  
