@@ -1,8 +1,7 @@
-const { BASE_URL, LOGIN_PAGE } = require('../constants');
+const { BASE_URL, LOGIN_PAGE_ADDRESS } = require('../constants');
 const Seller = require('./../models/sellerModel');
 const path = require('path');
 const { SendMail } = require('./authController');
-const { error } = require('console');
 const fs = require('fs').promises;
 
 
@@ -61,7 +60,7 @@ const updateApprovalRegisteredSeller = async(req, res) => {
                     <hr/>
                     <h4>Your Seller account got approved</h4>
                     <p>You can login to your seller account</p>
-                    <p><a href="${LOGIN_PAGE}">Login</a></p>
+                    <p><a href="${LOGIN_PAGE_ADDRESS}">Login</a></p>
                     </div>
                     `;
                     SendMail(process.env.EMAIL, updatedSeller.email, "Your Account is Approved", html)

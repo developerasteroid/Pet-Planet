@@ -5,7 +5,7 @@ import delta from './assets/delta.png';
 
 const APCategoryComponent = (props) => {
   return (
-    <div className="category-container">
+    <div className="category-container" onClick={props.onClick}>
       <div className="category-img">
         <img src={props.img} alt="" className="img" />
       </div>

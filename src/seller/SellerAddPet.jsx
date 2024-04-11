@@ -15,6 +15,8 @@ const SellerAddPet = () => {
       width: '',
       weight:'',
       petImage: null,
+      certified: false,
+      certificateImage: null,
       bloodline: false,
       motherImage: null,
       motherHeight: '',
@@ -251,7 +253,38 @@ const SellerAddPet = () => {
                 onChange={handleFileUpload}
                 required
               />
-  
+
+      
+              {/* certified */}
+              <div>
+              <label>
+                <input
+                  type="checkbox"
+                  name="certified"
+                  className='pet-checkbox'
+                  onChange={handleCheckboxChange}
+                />
+                Certified
+              </label>
+              {formData.certified && (
+                <div>
+                  <label htmlFor="certificateImage">Upload certificate Photo:</label>
+                  <input
+                    type="file"
+                    name="certificateImage"
+                    id="certificateImage"
+                    className="pet-input-field"
+                    onChange={handleFileUpload}
+                    required
+                  />
+                </div>
+              )}
+
+              </div>
+
+             
+              
+              {/* blood line */}
               <label>
                 <input
                   type="checkbox"

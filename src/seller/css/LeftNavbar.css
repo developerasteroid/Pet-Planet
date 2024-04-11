@@ -24,6 +24,7 @@
 
 .nav-contents:hover {
   background-color: #39444f; /* Darker background color on hover */
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
