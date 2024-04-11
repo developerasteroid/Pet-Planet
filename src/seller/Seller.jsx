@@ -4,6 +4,10 @@ import LeftNavbar from './LeftNavbar';
 import './css/Seller.css';
 import APPage from './APPage';
 import SellerAddPet from './SellerAddPet';
+import SellerAddFood from './SellerAddFood';
+import SellerAddAccessories from './SellerAddAccessories';
+import SellerRegister from './SellerRegister';
+import SellerManageProducts from './SellerManageProducts';
 
 function Seller() {
   return (
@@ -13,10 +17,14 @@ function Seller() {
       <TopNavbar />
       <div className="container">
         <LeftNavbar />
-        <div className="scrollable-content"> {/* Add a container for scrollable content */}
+        <div className="scrollable-content">
+        <div className="scrollable-content-inner"> 
           {/* <APPage/> */}
-          <div className="scrollable-content-inner"> {/* Add an inner container */}
-            <SellerAddPet />
+         
+            <SellerAddPet /> 
+            {/* <SellerAddFood/> */}
+            {/* <SellerAddAccessories/> */}
+            {/* <SellerManageProducts/> */}
           </div>
         </div>
       </div>

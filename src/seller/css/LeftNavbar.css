@@ -1,39 +1,38 @@
 .LeftNavbar-container {
-    display: flex;
-    flex-direction: column;
-    width: 250px; /* Adjust width as needed */
-    background-color: #273036; /* Dark background color */
-    height: 100vh;
-    color: #fff; /* Text color */
-    font-size: 20px;
-    border-right: 1px solid #44505d; /* Border color */
-    justify-content: flex-start;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  width: 250px; /* Adjust width as needed */
+  background-color: #273036; /* Dark background color */
+  height: 100vh;
+  color: #fff; /* Text color */
+  font-size: 20px;
+  border-right: 1px solid #44505d; /* Border color */
+  justify-content: flex-start;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+}
+
+.nav-contents {
+  border-bottom: 1px solid #44505d; /* Border color */
+  padding: 15px; /* Add padding for better alignment */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  transition: background-color 0.3s ease; /* Add transition for hover effect */
+}
+
+.nav-contents:hover {
+  background-color: #39444f; /* Darker background color on hover */
+}
+
+@media screen and (max-width: 768px) {
+  .LeftNavbar-container {
+    width: 100%; /* Set width to 100% for smaller screens */
   }
-  
+
   .nav-contents {
-    border-bottom: 1px solid #44505d; /* Border color */
-    padding: 15px; /* Add padding for better alignment */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    transition: background-color 0.3s ease; /* Add transition for hover effect */
+    padding: 10px; /* Adjust padding for smaller screens */
+    font-size: 18px; /* Decrease font size for smaller screens */
   }
-  
-  .nav-contents:hover {
-    background-color: #39444f; /* Darker background color on hover */
-  }
-  
-  @media screen and (max-width: 768px) {
-    .LeftNavbar-container {
-      width: 100%; /* Set width to 100% for smaller screens */
-    }
-  
-    .nav-contents {
-      padding: 10px; /* Adjust padding for smaller screens */
-      font-size: 18px; /* Decrease font size for smaller screens */
-    }
-  }
-  
+}

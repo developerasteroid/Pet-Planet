@@ -1,4 +1,4 @@
-.food-mainContainer {
+.acce-mainContainer {
     display: flex;
     justify-content: center;
     align-items: flex-start; /* Align items to the top */
@@ -8,7 +8,7 @@
     box-sizing: border-box; /* Include padding in height calculation */
   }
   
-  .food-form-container {
+  .acce-form-container {
     width: 80%;
     max-width: 600px;
     padding: 20px;
@@ -16,11 +16,11 @@
     border-radius: 10px;
   }
   
-  .food-form-title {
+  .acce-form-title {
     text-align: center;
   }
   
-  .food-input-field {
+  .acce-input-field {
     width: 100%;
     margin-bottom: 15px;
     padding: 10px;
@@ -28,15 +28,15 @@
     border-radius: 5px;
   }
   
-  .food-radio {
+  .acce-radio {
     margin-bottom: 15px;
   }
   
-  .food-checkbox {
+  .acce-checkbox {
     margin-bottom: 15px;
   }
   
-  .food-submit-button {
+  .acce-submit-button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -46,12 +46,12 @@
     cursor: pointer;
   }
   
-  .food-submit-button:hover {
+  .acce-submit-button:hover {
     background-color: #0056b3;
   }
   
   @media screen and (max-width: 768px) {
-    .food-form-container {
+    .acce-form-container {
         width: 90%;
     }
   }

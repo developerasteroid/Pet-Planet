@@ -13,6 +13,7 @@ const SellerAddPet = () => {
       height: '',
       length: '',
       width: '',
+      weight:'',
       petImage: null,
       bloodline: false,
       motherImage: null,
@@ -46,8 +47,15 @@ const SellerAddPet = () => {
   
     const handleSubmit = (e) => {
       e.preventDefault();
-      // Handle form submission logic here
-      console.log('Form Data:', formData);
+
+      const isConfirmed = window.confirm('Are you sure you want sell this product');
+
+      if (isConfirmed) {
+        console.log('Form submitted successfully!');
+        console.log('Form Data:', formData);
+      } else {
+        console.log('Form submission cancelled.');
+      }
     };
   
     return (
@@ -108,6 +116,7 @@ const SellerAddPet = () => {
               <input
                 type="number"
                 name="age"
+                placeholder='Age in months (*Required)'
                 id="age"
                 className="pet-input-field"
                 value={formData.age}
@@ -118,6 +127,7 @@ const SellerAddPet = () => {
               <label htmlFor="quantity">Quantity:</label>
               <input
                 type="number"
+                placeholder='Quantity in number (*Required)'
                 name="quantity"
                 id="quantity"
                 className="pet-input-field"
@@ -162,6 +172,7 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="maleQuantity"
+                    placeholder='Enter male quantity (*Required)'
                     id="maleQuantity"
                     className="pet-input-field"
                     value={formData.maleQuantity}
@@ -173,6 +184,7 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="femaleQuantity"
+                    placeholder='Enter female quantity (*Required)'
                     id="femaleQuantity"
                     className="pet-input-field"
                     value={formData.femaleQuantity}
@@ -186,6 +198,7 @@ const SellerAddPet = () => {
               <input
                 type="number"
                 name="height"
+                placeholder='Height in cm (*Required)'
                 id="height"
                 className="pet-input-field"
                 value={formData.height}
@@ -197,6 +210,7 @@ const SellerAddPet = () => {
               <input
                 type="number"
                 name="length"
+                placeholder='Lenght in cm (*Required)'
                 id="length"
                 className="pet-input-field"
                 value={formData.length}
@@ -208,9 +222,22 @@ const SellerAddPet = () => {
               <input
                 type="number"
                 name="width"
+                placeholder='Width in cm (*Required)'
                 id="width"
                 className="pet-input-field"
                 value={formData.width}
+                onChange={handleInputChange}
+                required
+              />
+
+            <label htmlFor="weight">Current weight of Pet:</label>
+              <input
+                type="number"
+                name="weight"
+                placeholder='Weight in kg (*Required)'
+                id="weight"
+                className="pet-input-field"
+                value={formData.weight}
                 onChange={handleInputChange}
                 required
               />
@@ -250,6 +277,7 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="motherHeight"
+                    placeholder='Height in cm (*Required)'
                     id="motherHeight"
                     className="pet-input-field"
                     value={formData.motherHeight}
@@ -261,6 +289,7 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="motherWeight"
+                    placeholder='Weight in cm (*Required)'
                     id="motherWeight"
                     className="pet-input-field"
                     value={formData.motherWeight}
@@ -282,6 +311,7 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="fatherHeight"
+                    placeholder='Height in cm (*Required)'
                     id="fatherHeight"
                     className="pet-input-field"
                     value={formData.fatherHeight}
@@ -293,6 +323,7 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="fatherWeight"
+                    placeholder='Weight in cm (*Required)'
                     id="fatherWeight"
                     className="pet-input-field"
                     value={formData.fatherWeight}
@@ -334,6 +365,7 @@ const SellerAddPet = () => {
                         <input
                             type="number"
                             name="price"
+                            placeholder="In Rupees (*Required)"
                             id="price"
                             className="pet-input-field"
                             value={formData.price}
@@ -344,6 +376,7 @@ const SellerAddPet = () => {
               <label htmlFor="description">Description:</label>
               <textarea
                 name="description"
+                placeholder='write description of your pet (Optional)'
                 id="description"
                 className="pet-input-field"
                 value={formData.description}
