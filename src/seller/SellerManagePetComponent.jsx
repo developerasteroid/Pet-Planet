@@ -1,86 +1,102 @@
-import React, { useState } from 'react'
-import './css/SellerManagePetComponent.css'
+import React, { useState } from 'react';
+import './css/SellerManagePetComponent.css';
 
 const SellerManagePetComponent = (props) => {
-  const [isChanged, setisChanged] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
+  const [data, setData] = useState({
+    Quantity: props.Quantity || 0,
+    Price: props.Price || 0
+  });
 
-  const [data, setdata] = useState({
-    Quantity: props.Quantity,
-    Price: props.Price
-  })
+  const handleInputChange = (e) => {
+    setIsChanged(true);
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
 
-  const handleInputChange =(e)=>{
-    setisChanged(true);
-    const {name, value} = e.target;
-    setdata({...data, [name]: value});
-  }
+  const handleSaveChanges = (e) => {
+
+    e.preventDefault();
+
+      const isConfirmed = window.confirm('Are you sure you want to edit this product');
+
+      if (isConfirmed) {
+        console.log('Form edited successfully!');
+        console.log('Form Data:', data);
+      } else {
+        console.log('data updation cancelled.');
+      } 
+ 
+  };
+
+  const handleDeleteBtn = () => {
+    console.log('Deleted');
+  };
+
   return (
-   <div className='ManagePet-MainContainer'>
-
-      <div className="ManagePet-container">
-
-        <div className='ManagePet-name'>
-          Pet: <div className='ManagePet-field'>
-          {props.petName}
+    <div className="ManagePet-Card">
+      <div className="ManagePet-Content">
+        <div className="ManagePet-Field">
+          <span>Pet:</span> {props.petName}
         </div>
+        <div className="ManagePet-Field">
+          <span>Breed:</span> {props.petBreed}
         </div>
-
-        <div className='ManagePet-name'>
-          Breed: <div className='ManagePet-field'>props.petBreed</div>
+        <div className="ManagePet-Field">
+          <span><div>Image:</div></span> <img src={props.petImage} alt="pet-picture" />
         </div>
-
-        <div className='ManagePet-name'>
-          Image: <div className='ManagePet-field'>props.petImage</div>
+        <div className="ManagePet-Field">
+          <span>Gender:</span> {props.gender}
         </div>
-
-        <div className='ManagePet-name'>
-          Breed: <div className='ManagePet-field'>props.petBreed</div>
-        </div>
-
-        <div>
-        <div className='ManagePet-name'>Gender: <div className='ManagePet-field'>props.gender</div></div>
-         <div className='ManagePet-name'>Quantity: <div><input 
-         type="number" 
-         className='ManagePet-field'
-         name='Quantity'
-         id='Quantity'
-         value={data.Quantity}
-         onChange={handleInputChange}
-         /></div></div> 
-        </div>
-
-        <div>
-        <div>Gender: <div>props.gender</div></div>
-         <div>Quantity: <div><input 
-         type="number" 
-         className='ManagePet-field'
-         name='Quantity'
-         id='Quantity'
-         value={data.Quantity}
-         onChange={handleInputChange}
-         /></div></div> 
-        </div>
-
-        <div>
-          <div className='ManagePet-name'>Price:
-            <input 
+        <div className="ManagePet-Field">
+          <span>Quantity:</span>{' '}
+          <input
             type="number"
-            className='ManagePet-filed' 
-            name='Price'
-            id='Price'
+            className="ManagePet-Input"
+            name="Quantity"
+            id="Quantity"
+            value={data.Quantity}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="ManagePet-Field">
+          <span>Gender:</span> {props.gender}
+        </div>
+        <div className="ManagePet-Field">
+          <span>Quantity:</span>{' '}
+          <input
+            type="number"
+            className="ManagePet-Input"
+            name="Quantity"
+            id="Quantity"
+            value={data.Quantity}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="ManagePet-Field">
+          <span>Price:</span>{' '}
+          <input
+            type="number"
+            className="ManagePet-Input"
+            name="Price"
+            id="Price"
             value={data.Price}
             onChange={handleInputChange}
-         />
-         </div>
-         </div> 
-
-         {isChanged && <button>
-            Save changes
-         </button>}
-
+          />
+        </div>
       </div>
-   </div>
-  )
-}
+      <div className="ManagePet-Actions">
+        {isChanged && (
+          <button className="btn-save-changes" onClick={handleSaveChanges}>
+            Save changes
+          </button>
+        )}
+        <button className="btn-delete" onClick={handleDeleteBtn}>
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+};
 
-export default SellerManagePetComponent
+export default SellerManagePetComponent;

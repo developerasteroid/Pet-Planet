@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './css/SellerManagePetComponent.css';
 
+const SellerManagePetAcceComponent = (props) => {
 
-const SellerManagePetFoodComponent = (props) => {
-
+    
   const [isChanged, setIsChanged] = useState(false);
   const [data, setData] = useState({
     Quantity: props.Quantity || 0,
@@ -17,7 +17,7 @@ const SellerManagePetFoodComponent = (props) => {
     setData({ ...data, [name]: value });
   };
 
-  const handleSaveChanges = (e) => {
+  const handleSaveChanges = () => {
 
     e.preventDefault();
 
@@ -39,13 +39,13 @@ const SellerManagePetFoodComponent = (props) => {
     <div className="ManagePet-Card">
     <div className="ManagePet-Content">
       <div className="ManagePet-Field">
-        <span>Food Type:</span> {props.foodType}
+        <span>Accessory Type:</span> {props.AcceType}
       </div>
       <div className="ManagePet-Field">
         <span>Company Name:</span> {props.companyName}
       </div>
       <div className="ManagePet-Field">
-      <span><div>Image:</div></span> <img src={props.foodImage} alt="food-picture" />
+      <span><div>Image:</div></span> <img src={props.acceImage} alt="acce-picture" />
       </div>
       <div className="ManagePet-Field">
         <span>Quantity:</span>{' '}
@@ -55,18 +55,6 @@ const SellerManagePetFoodComponent = (props) => {
           name="Quantity"
           id="Quantity"
           value={data.Quantity}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className="ManagePet-Field">
-        <span>Weight:</span>{' '}
-        <input
-          type="number"
-          className="ManagePet-Input"
-          name="Weight"
-          id="Weight"
-          value={data.Weight}
           onChange={handleInputChange}
         />
       </div>
@@ -97,4 +85,4 @@ const SellerManagePetFoodComponent = (props) => {
   )
 }
 
-export default SellerManagePetFoodComponent
+export default SellerManagePetAcceComponent

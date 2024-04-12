@@ -9,7 +9,7 @@ const LeftNavbar = () => {
       <div className="nav-contents" onClick={()=>{navigate('')}}>
         <div className="content">Add Product</div>
       </div>
-      <div className="nav-contents" onClick={()=>{navigate('manage/pet')}}>
+      <div className="nav-contents" onClick={()=>{navigate('manage/product')}}>
         <div className="content">Manage Product</div>
       </div>
       <div className="nav-contents">

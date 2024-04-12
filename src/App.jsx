@@ -14,7 +14,7 @@ import APPage from './seller/APPage';
 import SellerAddPet from './seller/SellerAddPet';
 import SellerAddFood from './seller/SellerAddFood';
 import SellerAddAccessories from './seller/SellerAddAccessories';
-import SellerManagePetComponent from './seller/SellerManagePetComponent';
+import SellerManageProducts from './seller/SellerManageProducts';
 
 function App() {
 
@@ -27,7 +27,7 @@ function App() {
           <Route path='add/product/pet' element={<SellerAddPet/>}/>
           <Route path='add/product/food' element={<SellerAddFood/>}/>
           <Route path='add/product/accessorie' element={<SellerAddAccessories/>}/>
-          <Route path='manage/pet' element={<SellerManagePetComponent/>}/>
+          <Route path='manage/product' element={<SellerManageProducts/>}/>
 
       </Route>
       <Route path='/seller/register' element={<SellerRegister/>}/>
