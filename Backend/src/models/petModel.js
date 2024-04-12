@@ -10,8 +10,8 @@ const petSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    age:{
-        type:Number,
+    dateOfBirth:{
+        type:Date,
         required:true
     },
     gender:{
@@ -31,6 +31,31 @@ const petSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
+    certified:{
+        type:Boolean,
+        default:false
+    },
+    certificatePhoto:{
+        type:String,
+        default:null
+    },
+    fatherPhoto:{
+        type:String,
+        default:null
+    },
+    motherPhoto:{
+        type:String,
+        default:null
+    },
+    fatherDetail:{
+        type:String,
+        default:null
+    },
+    motherDetail:{
+        type:String,
+        default:null
+    },
+
     
 });
 

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddPet.css';
+import sellerAxiosInstance from '../helper/sellerAxios';
 
 const SellerAddPet = () => {
     const [formData, setFormData] = useState({
       petType: '',
       petBreed:'',
-      age: '',
+      dob: '',
       quantity: '',
       gender: '',
       height: '',
@@ -47,14 +48,53 @@ const SellerAddPet = () => {
       setFormData({ ...formData, [e.target.name]: value });
     };
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
       e.preventDefault();
 
       const isConfirmed = window.confirm('Are you sure you want sell this product');
 
       if (isConfirmed) {
-        console.log('Form submitted successfully!');
+        
         console.log('Form Data:', formData);
+        try {
+          const data = {
+            name: formData.petType,
+            price:formData.price,
+            quantity:formData.quantity,
+            photo:formData.petImage,
+            weight:formData.weight,
+            description:formData.description,
+            type:formData.petType,
+            breed:formData.petBreed,
+            dob:formData.dob,
+            gender:'male',
+            height:formData.height,
+            width:formData.width,
+            length:formData.length,
+            certified:formData.certified,
+            certificatePhoto:formData.certificateImage,
+            fatherPhoto:formData.fatherImage,
+            motherPhoto:formData.motherImage,
+            fatherDetail:'height: '+formData.fatherHeight + '\nweight: '+ formData.fatherWeight,
+            motherDetail:'height: '+formData.motherHeight + '\nweight: '+ formData.motherWeight
+          }
+          console.log(data);
+          const response = await sellerAxiosInstance.post('api/seller/add/product/pet', data);
+          console.log(response.status);
+          console.log(response.data);
+        } catch (error) {
+          if(error.response){
+            if(error.response.status === 401){
+              navigate('/seller/login', {replace: true});
+            } else if(error.response.data && error.response.data.message){
+              toast.error(error.response.data.message);
+            } else {
+                toast.error(error.message);
+            }
+          } else {
+            toast.error(error.message);
+          }
+        }
       } else {
         console.log('Form submission cancelled.');
       }
@@ -116,10 +156,10 @@ const SellerAddPet = () => {
   
               <label htmlFor="age">Age:</label>
               <input
-                type="number"
-                name="age"
+                type="date"
+                name="dob"
                 placeholder='Age in months (*Required)'
-                id="age"
+                id="dob"
                 className="pet-input-field"
                 value={formData.age}
                 onChange={handleInputChange}
