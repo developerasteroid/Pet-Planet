@@ -35,13 +35,13 @@
   .ManagePet-Actions button {
     margin-left: 10px; /* Add space between buttons */
   }
-  .btn-save-changes{
+  .btn-save-changes, .Accept{
     padding: 7px 10px 7px 10px;
     background-color:rgb(35, 123, 237);
     color: white;
     border-radius: 4px;
   }
-  .btn-delete{
+  .btn-delete, .Decline{
     padding: 7px 10px 7px 10px;
     background-color: red;
     color: white;

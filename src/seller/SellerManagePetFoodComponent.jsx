@@ -7,7 +7,6 @@ const SellerManagePetFoodComponent = (props) => {
   const [isChanged, setIsChanged] = useState(false);
   const [data, setData] = useState({
     Quantity: props.Quantity || 0,
-    Weight: props.Weight || 0,
     Price: props.Price || 0
   });
 
@@ -55,18 +54,6 @@ const SellerManagePetFoodComponent = (props) => {
           name="Quantity"
           id="Quantity"
           value={data.Quantity}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className="ManagePet-Field">
-        <span>Weight:</span>{' '}
-        <input
-          type="number"
-          className="ManagePet-Input"
-          name="Weight"
-          id="Weight"
-          value={data.Weight}
           onChange={handleInputChange}
         />
       </div>

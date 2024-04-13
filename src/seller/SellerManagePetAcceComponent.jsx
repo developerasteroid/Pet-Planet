@@ -17,7 +17,7 @@ const SellerManagePetAcceComponent = (props) => {
     setData({ ...data, [name]: value });
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = (e) => {
 
     e.preventDefault();
 
