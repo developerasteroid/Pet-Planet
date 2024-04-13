@@ -42,7 +42,7 @@ const productSchema = new mongoose.Schema({
     paymentOption:{
         type:String,
         enum:['online', 'cod', 'both'],
-        default: 'online'
+        default: 'cod'
     },
     createdAt:{
         type:Date,

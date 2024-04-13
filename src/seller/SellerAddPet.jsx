@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddPet.css';
 import sellerAxiosInstance from '../helper/sellerAxios';
+import {useNavigate} from 'react-router-dom';
+
 
 const SellerAddPet = () => {
+    const navigate = useNavigate();
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
       petType: '',
       petBreed:'',
@@ -50,38 +54,97 @@ const SellerAddPet = () => {
   
     const handleSubmit = async(e) => {
       e.preventDefault();
+      if(isSubmitted){
+        return;
+      }
+      
+      if(formData.maleQuantity < 0 || formData.femaleQuantity < 0 || (((parseInt(formData.maleQuantity) + parseInt(formData.femaleQuantity)) != parseInt(formData.quantity)) && formData.quantity != 1) ){
+        toast.error('Invalid Quantity Value');
+        return;
+      }
 
       const isConfirmed = window.confirm('Are you sure you want sell this product');
 
       if (isConfirmed) {
+        setIsSubmitted(true);
         
-        console.log('Form Data:', formData);
+        
+        // console.log('Form Data:', formData);
         try {
-          const data = {
-            name: formData.petType,
-            price:formData.price,
-            quantity:formData.quantity,
-            photo:formData.petImage,
-            weight:formData.weight,
-            description:formData.description,
-            type:formData.petType,
-            breed:formData.petBreed,
-            dob:formData.dob,
-            gender:'male',
-            height:formData.height,
-            width:formData.width,
-            length:formData.length,
-            certified:formData.certified,
-            certificatePhoto:formData.certificateImage,
-            fatherPhoto:formData.fatherImage,
-            motherPhoto:formData.motherImage,
-            fatherDetail:'height: '+formData.fatherHeight + '\nweight: '+ formData.fatherWeight,
-            motherDetail:'height: '+formData.motherHeight + '\nweight: '+ formData.motherWeight
+          const formDataToSend = new FormData();
+
+
+          formDataToSend.append('name', formData.petBreed);
+          formDataToSend.append('price', formData.price);
+          formDataToSend.append('photo',formData.petImage);
+          formDataToSend.append('weight', formData.weight);
+          formDataToSend.append('description', formData.description);
+          formDataToSend.append('type', formData.petType);
+          formDataToSend.append('breed', formData.petBreed);
+          formDataToSend.append('dob', formData.dob);
+          
+          formDataToSend.append('height', formData.height);
+          formDataToSend.append('width', formData.width);
+          formDataToSend.append('length', formData.length);
+          formDataToSend.append('certified', formData.certified);
+          if(formData.certified)
+            formDataToSend.append('certificatePhoto', formData.certificateImage);
+          if(formData.bloodline){
+            formDataToSend.append('fatherPhoto', formData.fatherImage);
+            formDataToSend.append('motherPhoto', formData.motherImage);
+            formDataToSend.append('fatherDetail','height: '+formData.fatherHeight + '\nweight: '+ formData.fatherWeight);
+            formDataToSend.append('motherDetail', 'height: '+formData.motherHeight + '\nweight: '+ formData.motherWeight);  
           }
-          console.log(data);
-          const response = await sellerAxiosInstance.post('api/seller/add/product/pet', data);
-          console.log(response.status);
-          console.log(response.data);
+
+          //for male pet
+          if(formData.maleQuantity > 0 && formData.quantity > 1){
+            formDataToSend.append('quantity', formData.maleQuantity);
+            formDataToSend.append('gender', 'male');
+            
+            let response = await sellerAxiosInstance.post('api/seller/add/product/pet', formDataToSend, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+            });
+            if(response.status==200 && response.data && response.data.message){
+              toast.success(response.data.message + `\nMale-${formData.maleQuantity}`);
+            }
+            
+            formDataToSend.delete('quantity');
+            formDataToSend.delete('gender');
+            
+            
+          }
+
+
+          //for female
+          if(formData.femaleQuantity > 0 && formData.quantity > 1){
+            formDataToSend.append('quantity', formData.femaleQuantity);
+            formDataToSend.append('gender', 'female');
+            
+            let response = await sellerAxiosInstance.post('api/seller/add/product/pet', formDataToSend, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+            });
+            if(response.status==200 && response.data && response.data.message){
+              toast.success(response.data.message + `\nFemale-${formData.femaleQuantity}`);
+            }
+          } 
+          if(formData.quantity == 1){
+            formDataToSend.append('quantity', formData.quantity);
+            formDataToSend.append('gender', (formData.gender == "Male" ? 'male' : 'female'));
+            
+            let response = await sellerAxiosInstance.post('api/seller/add/product/pet', formDataToSend, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+            });
+            if(response.status==200 && response.data && response.data.message){
+              toast.success(response.data.message + `\n${formData.gender}-${formData.femaleQuantity}`);
+            }
+          }
+
         } catch (error) {
           if(error.response){
             if(error.response.status === 401){
@@ -95,14 +158,16 @@ const SellerAddPet = () => {
             toast.error(error.message);
           }
         }
+
+        setIsSubmitted(false);
       } else {
-        console.log('Form submission cancelled.');
+        //if canceled
       }
     };
   
     return (
       <>
-        <ToastContainer />
+      <ToastContainer/>
         <div className="pet-mainContainer">
           <div className="pet-form-container">
             <h2 className="pet-form-title">Sell Pet</h2>
@@ -154,14 +219,13 @@ const SellerAddPet = () => {
 
               </select>
   
-              <label htmlFor="age">Age:</label>
+              <label htmlFor="age">Date of Birth:</label>
               <input
                 type="date"
                 name="dob"
-                placeholder='Age in months (*Required)'
                 id="dob"
                 className="pet-input-field"
-                value={formData.age}
+                value={formData.dob}
                 onChange={handleInputChange}
                 required
               />

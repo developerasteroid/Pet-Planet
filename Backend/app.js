@@ -17,6 +17,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./src/routes/authRoutes'));
 app.use('/api/admin', require('./src/routes/adminRoutes'));
 app.use('/api/seller', require('./src/routes/sellerRoutes'));
+app.use('/api/user', require('./src/routes/userRoutess'));
+app.use('/image', require('./src/routes/imageRoutes'));
 
 
 app.listen(PORT, () =>{
