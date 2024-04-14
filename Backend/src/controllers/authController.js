@@ -163,7 +163,7 @@ const RegisterSeller = async(req, res) => {
 
         const profilePhotoPath = req.file.path;
         const profileImageUrl = req.file.filename;
-        // console.log("Photo File:", profilePhotoPath);
+        
 
 
         if(acceptTerms != 'true'){
