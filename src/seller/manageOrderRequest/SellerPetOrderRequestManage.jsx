@@ -24,6 +24,7 @@ const SellerPetOrderRequestManage = (props) => {
 
   return (
     <div className="ManagePet-Card">
+      <h2>Pet</h2>
     <div className="ManagePet-Content">
       <div className="ManagePet-Field">
         <span>Order id:</span> {props.oderid}
@@ -34,21 +35,12 @@ const SellerPetOrderRequestManage = (props) => {
       <div className="ManagePet-Field">
         <span>Customer Address:</span> {props.customerAddress}
       </div>
-
+  
       <div className="ManagePet-Field">
-        <span>Customer Mobile No:</span> {props.customerMbNo}
+        <span> Breed:</span> {props.Breed}
       </div>
       <div className="ManagePet-Field">
-        <span>Category:</span> {props.category}
-      </div>
-      <div className="ManagePet-Field">
-        <span>Product Type:</span> {props.productType}
-      </div>
-      <div className="ManagePet-Field">
-        <span> Name:</span> {props.pName}
-      </div>
-      <div className="ManagePet-Field">
-      <span><div>Image:</div></span> <img src={props.pImage} alt="food-picture" />
+      <span><div>Image:</div></span> <img src={props.pImage} alt="Pet-picture" />
       </div>
       <div className="ManagePet-Field">
         <span>Gender:</span> {props.gender}
@@ -56,6 +48,10 @@ const SellerPetOrderRequestManage = (props) => {
       <div className="ManagePet-Field">
         <span>Quantity:</span> {props.Quantity}
       </div>
+      <div className="ManagePet-Field">
+        <span>Mode of Payment:</span> {props.payment}
+      </div>
+
 
       <div className="ManagePet-Field">
         <span>Price:</span> {props.Price}

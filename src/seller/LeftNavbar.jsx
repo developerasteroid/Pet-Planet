@@ -15,11 +15,11 @@ const LeftNavbar = () => {
       <div className="nav-contents" onClick={()=>{navigate('manage/orderrequest')}}>
         <div className="content">Manage Order Request</div>
       </div>
-      <div className="nav-contents">
-        <div className="content">Sold History</div>
+      <div className="nav-contents" onClick={()=>{navigate('manage/orders')}}>
+        <div className="content" >Manage Orders</div>
       </div>
-      <div className="nav-contents">
-        <div className="content">Manage Return Request</div>
+      <div className="nav-contents" onClick={()=>{navigate('soldhistory')}}>
+        <div className="content">Sold History</div>
       </div>
       <div className="nav-contents" onClick={()=>{localStorage.removeItem('sellerToken'); navigate('/seller/login', {replace: true});}}>
         <div className="content">Logout</div>

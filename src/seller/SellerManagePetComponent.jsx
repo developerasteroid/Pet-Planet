@@ -35,6 +35,7 @@ const SellerManagePetComponent = (props) => {
 
   return (
     <div className="ManagePet-Card">
+      <h2>Manage Pet</h2>
       <div className="ManagePet-Content">
         <div className="ManagePet-Field">
           <span>Pet:</span> {props.petName}

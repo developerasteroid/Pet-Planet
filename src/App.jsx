@@ -16,6 +16,8 @@ import SellerAddFood from './seller/SellerAddFood';
 import SellerAddAccessories from './seller/SellerAddAccessories';
 import SellerManageProducts from './seller/SellerManageProducts';
 import SellerOrderRequestManagePage from './seller/manageOrderRequest/SellerOrderRequestManagePage';
+import ManageOrders from './seller/manageOrders/ManageOrders';
+import ProductsSoldPage from './seller/soldHistory/ProductsSoldPage';
 
 function App() {
 
@@ -30,6 +32,8 @@ function App() {
           <Route path='add/product/accessorie' element={<SellerAddAccessories/>}/>
           <Route path='manage/product' element={<SellerManageProducts/>}/>
           <Route path='manage/orderrequest' element={<SellerOrderRequestManagePage/>}/>
+          <Route path='manage/orders' element={<ManageOrders/>}/>
+          <Route path='soldhistory' element={<ProductsSoldPage/>}/>
       </Route>
       <Route path='/seller/register' element={<SellerRegister/>}/>
       <Route path='/seller/login' element={<SellerLogin/>}/>

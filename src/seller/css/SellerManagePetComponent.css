@@ -9,6 +9,12 @@
     margin: 0 auto; /* Center the card horizontally */
     margin-top: 10px;
   }
+
+  .ManagePet-Card h2{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
   
   .ManagePet-Content {
     margin-bottom: 10px;
@@ -18,9 +24,9 @@
     margin-bottom: 8px;
   }
   
-  .ManagePet-Field span {
+  /* .ManagePet-Field span {
     font-weight: bold;
-  }
+  } */
   
   .ManagePet-Input {
     width: 100px; /* Adjust width as needed */

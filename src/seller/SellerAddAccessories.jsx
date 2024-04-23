@@ -51,7 +51,7 @@ const SellerAddAccessories = () => {
 
             <form onSubmit={handleSubmit}>
 
-              <label htmlFor="petType">Select Pet:</label>
+              <label htmlFor="petType">Select Accessories:</label>
               <select
                 name="acceType"
                 id="acceType"

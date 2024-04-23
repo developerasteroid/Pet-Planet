@@ -37,6 +37,7 @@ const SellerManagePetAcceComponent = (props) => {
   };
   return (
     <div className="ManagePet-Card">
+      <h2>Manage Pet Accessory</h2>
     <div className="ManagePet-Content">
       <div className="ManagePet-Field">
         <span>Accessory Type:</span> {props.AcceType}
