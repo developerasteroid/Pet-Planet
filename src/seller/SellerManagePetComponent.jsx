@@ -46,20 +46,7 @@ const SellerManagePetComponent = (props) => {
         <div className="ManagePet-Field">
           <span><div>Image:</div></span> <img src={props.petImage} alt="pet-picture" />
         </div>
-        <div className="ManagePet-Field">
-          <span>Gender:</span> {props.gender}
-        </div>
-        <div className="ManagePet-Field">
-          <span>Quantity:</span>{' '}
-          <input
-            type="number"
-            className="ManagePet-Input"
-            name="Quantity"
-            id="Quantity"
-            value={data.Quantity}
-            onChange={handleInputChange}
-          />
-        </div>
+        
         <div className="ManagePet-Field">
           <span>Gender:</span> {props.gender}
         </div>

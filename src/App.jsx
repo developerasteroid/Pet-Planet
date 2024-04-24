@@ -1,8 +1,6 @@
 import './App.css'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
-// import Admin from './admin/Admin'
-
 
 import SellerRegister from './seller/SellerRegister'
 import Seller from './seller/Seller'
@@ -27,8 +25,8 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-      <Route path='/' element={<div><h1>Home</h1></div>} errorElement={<ErrorPage/>}/> 
-      <Route path='/seller' element={<Seller/>}>
+      {/* <Route path='/' element={<div>Home</div>} errorElement={<ErrorPage/>}/>  */}
+      <Route path='/' element={<Seller/>} errorElement={<ErrorPage/>}>
           <Route path='' element={<APPage/>}/>
           <Route path='add/product/pet' element={<SellerAddPet/>}/>
           <Route path='add/product/food' element={<SellerAddFood/>}/>
