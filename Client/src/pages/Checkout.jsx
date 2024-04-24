@@ -43,18 +43,18 @@ const Checkout = () => {
                 <div className="card-body">
                   <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                      Products ({totalItems})<span>${Math.round(subtotal)}</span>
+                      Products ({totalItems})<span>Rs{Math.round(subtotal)}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                       Shipping
-                      <span>${shipping}</span>
+                      <span>Rs{shipping}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                       <div>
                         <strong>Total amount</strong>
                       </div>
                       <span>
-                        <strong>${Math.round(subtotal + shipping)}</strong>
+                        <strong>Rs{Math.round(subtotal + shipping)}</strong>
                       </span>
                     </li>
                   </ul>
@@ -168,7 +168,34 @@ const Checkout = () => {
                         <br />
                         <select className="form-select" id="state" required>
                           <option value="">Choose...</option>
+                          <option>Andhra Pradesh</option>
+                          <option>Arunachal Pradesh</option>
+                          <option>Assam</option>
+                          <option>Bihar</option>
+                          <option>Chhattisgarh</option>
+                          <option>Goa</option>
+                          <option>Gujarat</option>
+                          <option>Haryana</option>
+                          <option>Himachal Pradesh</option>
+                          <option>Jharkhand</option>
+                          <option>Karnataka</option>
+                          <option>Kerala</option>
+                          <option>Madhya Pradesh</option>
+                          <option>Maharashtra</option>
+                          <option>Manipur</option>
+                          <option>Meghalaya</option>
+                          <option>Mizoram</option>
+                          <option>Nagaland</option>
+                          <option>Odisha</option>
                           <option>Punjab</option>
+                          <option>Rajasthan</option>
+                          <option>Sikkim</option>
+                          <option>Tamil Nadu</option>
+                          <option>Tripura</option>
+                          <option>Uttarakhand</option>
+                          <option>Uttar Pradesh</option>
+                          <option>West Bengal</option>
+
                         </select>
                         <div className="invalid-feedback">
                           Please provide a valid state.
@@ -197,7 +224,7 @@ const Checkout = () => {
                     <h4 className="mb-3">Payment</h4>
 
                     <div className="row gy-3">
-                      <div className="col-md-6">
+                      {/* <div className="col-md-6">
                         <label for="cc-name" className="form-label">
                           Name on card
                         </label>
@@ -262,10 +289,15 @@ const Checkout = () => {
                         <div className="invalid-feedback">
                           Security code required
                         </div>
+                      </div> */}
+                      <div className="col-md-6">
+                        <label for="Payment" className="form-label ">
+                         Only Cash On Delivery
+                        </label>
                       </div>
                     </div>
 
-                    <hr className="my-4" />
+                    {/* <hr className="my-4" /> */}
 
                     <button
                       className="w-100 btn btn-primary "
