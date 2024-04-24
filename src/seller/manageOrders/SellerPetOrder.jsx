@@ -46,7 +46,9 @@ const SellerPetOrder = (props) => {
     <div className="ManagePet-Field">
       <span>Customer Address:</span> {props.customerAddress}
     </div>
-
+    <div className="ManagePet-Field">
+      <span>Customer Ph.no:</span> {props.customerphno}
+    </div>
     <div className="ManagePet-Field">
       <span> Breed:</span> {props.Breed}
     </div>

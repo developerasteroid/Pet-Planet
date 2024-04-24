@@ -9,8 +9,76 @@
     align-items: center; /* Center the image vertically */
   }
 
-  .admin-sellerProfile img {
-    max-width: 100%; /* Ensure the image doesn't exceed the container width */
+img {
+    max-width: 20%; /* Ensure the image doesn't exceed the container width */
     max-height: 100%; /* Ensure the image doesn't exceed the container height */
     border: 1px solid #ccc; /* Add border around the image */
   }
+
+  .ManagePet-Card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    max-width: 600px; /* Limit card width if needed */
+    margin: 0 auto; /* Center the card horizontally */
+    margin-top: 10px;
+  }
+
+  .ManagePet-Card h2{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  
+  .ManagePet-Content {
+    margin-bottom: 10px;
+  }
+  
+  .ManagePet-Field {
+    margin-bottom: 8px;
+  }
+  
+  /* .ManagePet-Field span {
+    font-weight: bold;
+  } */
+  
+  .ManagePet-Input {
+    width: 100px; /* Adjust width as needed */
+    padding: 5px;
+  }
+  
+  .ManagePet-Actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+  }
+  
+  .ManagePet-Actions button {
+    margin-left: 10px; /* Add space between buttons */
+  }
+  .btn-save-changes, .Accept{
+    padding: 7px 10px 7px 10px;
+    background-color:rgb(35, 123, 237);
+    color: white;
+    border-radius: 4px;
+  }
+  .btn-delete, .Decline{
+    padding: 7px 10px 7px 10px;
+    background-color: red;
+    color: white;
+    border-radius: 4px;
+
+  }
+  .ManagePet-Actions button:hover{
+    cursor: pointer;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .ManagePet-Card {
+      width: 90%; /* Adjust width for smaller screens */
+      margin: 0 auto; /* Center the card horizontally */
+    }
+  }
+  

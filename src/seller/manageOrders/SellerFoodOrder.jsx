@@ -50,6 +50,9 @@ const SellerFoodOrder = (props) => {
               <span>Customer Address:</span> {props.customerAddress}
             </div>
             <div className="ManagePet-Field">
+            <span>Customer Ph.no:</span> {props.customerphno}
+          </div>
+            <div className="ManagePet-Field">
               <span>Product Type:</span> {props.productType}
             </div>
             <div className="ManagePet-Field">

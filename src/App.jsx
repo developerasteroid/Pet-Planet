@@ -18,6 +18,9 @@ import SellerManageProducts from './seller/SellerManageProducts';
 import SellerOrderRequestManagePage from './seller/manageOrderRequest/SellerOrderRequestManagePage';
 import ManageOrders from './seller/manageOrders/ManageOrders';
 import ProductsSoldPage from './seller/soldHistory/ProductsSoldPage';
+import AdminSellerNewRequest from './admin/AdminSellerNewRequest';
+import ManageSellers from './admin/manageSellers/ManageSellers';
+import OrdersDelivered from './admin/ordersDelivered/OrdersDelivered';
 
 function App() {
 
@@ -37,7 +40,11 @@ function App() {
       </Route>
       <Route path='/seller/register' element={<SellerRegister/>}/>
       <Route path='/seller/login' element={<SellerLogin/>}/>
-      <Route path='/admin' element={<Admin/>}/>
+      <Route path='/admin' element={<Admin/>}>
+        <Route path='' element={<AdminSellerNewRequest/>}/>
+        <Route path='manage/sellers' element={<ManageSellers/>}/>
+        <Route path='orders/delivered' element={<OrdersDelivered/>}/>
+      </Route>
       <Route path='/admin/login' element={<AdminLogin/>}/>
 
       </>

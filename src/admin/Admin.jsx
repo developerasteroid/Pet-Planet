@@ -6,7 +6,7 @@ import AdminSellerNewRequest from './AdminSellerNewRequest'
 import './css/Admin.css';
 import adminAxiosInstance from '../helper/adminAxios';
 import { ToastContainer, toast } from "react-toastify";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Outlet} from 'react-router-dom';
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -36,12 +36,24 @@ const Admin = () => {
 
   return (
     <>
-      <ToastContainer />
+      {/* <ToastContainer />
        <AdminTopNavbar/>
     <div className="admin-container">
       <AdminLeftNavbar/>
       <AdminSellerNewRequest/>
-    </div>
+    </div> */}
+
+    <AdminTopNavbar/>
+      <div className="container">
+        <AdminLeftNavbar />
+        <div className="scrollable-content">
+        <div className="scrollable-content-inner"> 
+          <Outlet/>
+           
+            {/* <AdminSellerNewRequest/> */}
+          </div>
+        </div>
+      </div>
     </>
   )
 }

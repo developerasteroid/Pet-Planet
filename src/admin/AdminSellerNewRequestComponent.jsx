@@ -43,29 +43,48 @@ const AdminSellerNewRequestComponent = (props) => {
     isClicked.current = false;
   }
   return (
-    <div className='admin-SellerNewRequestComponent-container'>
 
-      <div className='Adminseller-info-container'>
+        <div className="ManagePet-Card">
+        <h2>New Request</h2>
+          <div className="ManagePet-Content">
+          <div className="ManagePet-Field">
+            <span>Picture :</span> <div><img src={props.img} alt="seller-picture" /></div>
+          </div>
+          <div className="ManagePet-Field">
+            <span>Name:</span> {props.sellername}
+          </div>
+          <div className="ManagePet-Field">
+            <span>Shop Name:</span> {props.sellershopname}
+          </div>
+          <div className="ManagePet-Field">
+            <span>E-mail :</span> {props.selleremail}
+          </div>
+          <div className="ManagePet-Field">
+            <span>Seller d.o.b:</span> {props.sellerdob}
+          </div>
+          <div className="ManagePet-Field">
+            <span>Ph.no:</span> {props.sellerphno}
+          </div>
+          <div className="ManagePet-Field">
+            <span>Adhaar no:</span> {props.selleradhaarnumber}
+          </div>
+          <div className="ManagePet-Field">
+            <span>Bank Account No:</span> {props.selleraccountnumber}
+          </div>
 
-      
+              </div>
+              <div className="ManagePet-Actions">
+        <button className="Accept" onClick={()=>{updateApproval(props.sellerID, true)}}>
+              Accept
+            </button>
+          <button className="Decline" onClick={()=>{updateApproval(props.sellerID, false)}}>
+            Decline
+          </button>
+         </div>
+                
+      </div>
 
-        <div>Picture: <div className='admin-sellerProfile'><img src={props.img} alt="seller-picture" /></div></div>
-        <div>Name: <div>{props.sellername}</div></div>
-        <div>Shop-Name: <div>{props.sellershopname}</div></div>
-        <div>e-mail: <div>{props.selleremail}</div></div>
-        <div>dob: <div>{props.sellerdob}</div></div>
-        <div>Ph-no: <div>{props.sellerphno}</div></div>
-        <div>Adhaar-number: <div>{props.selleradhaarnumber}</div></div>
-        <div>Bank-account-number: <div>{props.selleraccountnumber}</div></div>
 
-        </div>
-
-        <div className="AdminButton-container">
-          <button className='Admin-btn-rccept' onClick={()=>{updateApproval(props.sellerID, true)}}>Accept</button>
-          <button className='Admin-btn-reject' onClick={()=>{updateApproval(props.sellerID, false)}}>Decline</button>
-        </div>
-      
-    </div>
   )
 }
 
