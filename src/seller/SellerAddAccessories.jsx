@@ -133,7 +133,7 @@ const SellerAddAccessories = () => {
                 required
               />
 
-            <label htmlFor="thick">Thickness of Pet:</label>
+            <label htmlFor="thick">Thickness of Product:</label>
               <input
                 type="number"
                 name="thick"

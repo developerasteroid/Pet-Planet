@@ -31,7 +31,7 @@ const SellerLogin = () => {
       const response = await sellerAxiosInstance.post('api/auth/seller/login', formData);
       if(response.status === 200 && response.data.token){
         localStorage.setItem('sellerToken', response.data.token);
-        navigate('/seller', {replace: true});
+        navigate('/', {replace: true});
       } else {
         throw new Error("Not able to Login. Server Error");
       }
