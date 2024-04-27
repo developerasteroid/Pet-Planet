@@ -276,7 +276,7 @@ const getMyProducts = async(req, res) => {
                     companyName:info.companyName
                 })
             } else if(product.category == 'accessory'){
-
+                const info = await Accessory.findById(product.informationId);
                 data.push({
                     _id:product._id,
                     name:product.name,
@@ -288,7 +288,9 @@ const getMyProducts = async(req, res) => {
                     weight:product.weight,
                     description:product.description,
                     paymentOption:product.paymentOption,
-                    createdAt:product.createdAt
+                    createdAt:product.createdAt,
+                    type:info.type,
+                    companyName:info.companyName
                 })
             }
         }
