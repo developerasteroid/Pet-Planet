@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const customerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     fullName: {
         type:String,
         required:true
@@ -30,35 +30,35 @@ const customerSchema = new mongoose.Schema({
     },
     place:{
         type:String,
-        require:true
+        default: null
     },
     pinCode:{
         type:String,
-        require:true
+        default: null
     },
     landMark:{
         type:String,
-        require:true
+        default: null
     },
     doorNumber:{
         type:String,
-        require:true
+        default: null
     },
     state:{
         type:String,
-        require:true
+        default: null
     },
     district:{
         type:String,
-        require:true
+        default: null
     },
     taluk:{
         type:String,
-        require:true
+        default: null
     },
     village: {
         type:String,
-        required:true
+        default: null
     },
     bankAccountNumber: {
         type:String,
@@ -72,14 +72,14 @@ const customerSchema = new mongoose.Schema({
 
 
 // Hash the password before saving it to the database
-customerSchema.pre('save', async function(next) {
-    const customer = this;
-    if (!customer.isModified('password')) return next();
+userSchema.pre('save', async function(next) {
+    const user = this;
+    if (!user.isModified('password')) return next();
 
     try {
         const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(customer.password, salt);
-        customer.password = hash;
+        const hash = await bcrypt.hash(user.password, salt);
+        user.password = hash;
         next();
     } catch (error) {
         next(error);
@@ -87,7 +87,7 @@ customerSchema.pre('save', async function(next) {
 });
 
 // Method to compare password during login
-customerSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function(candidatePassword) {
     try {
         return await bcrypt.compare(candidatePassword, this.password);
     } catch (error) {
@@ -95,4 +95,4 @@ customerSchema.methods.comparePassword = async function(candidatePassword) {
     }
 };
 
-module.exports = mongoose.model('Customer', customerSchema);
+module.exports = mongoose.model('User', userSchema);

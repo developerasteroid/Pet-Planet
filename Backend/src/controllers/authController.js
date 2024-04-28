@@ -1,5 +1,7 @@
 const Seller = require('./../models/sellerModel');
 const SellerEmailOtp = require('./../models/sellerEmailOtpModel');
+const User = require('./../models/userModel');
+const UserEmailOtp = require('./../models/userEmailOtpModel');
 const nodemailer = require('nodemailer');
 const dns = require('dns');
 const fs = require('fs');
@@ -7,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const sellerRigisterOtpExpireTime = 30 * 60 * 1000; // 30 minutes to milliseconds
+const userRigisterOtpExpireTime = 30 * 60 * 1000; // 30 minutes to milliseconds
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -285,4 +288,201 @@ const AdminLogin = async(req, res) => {
     }
 }
 
-module.exports = {RegisterSeller, SellerSendOtp, LoginSeller, AdminLogin, SendMail};
+const UserSendOtp = async(req, res) => {
+    try {
+        const {email} = req.body;
+
+        if(!isValidEmail(email)){
+            return res.status(400).json({message: 'Invalid Email Format'});
+        }
+
+        const domainExist = await new Promise((resolve, reject) => {
+            // Get the domain of the email address
+            const domain = email.split('@')[1];
+
+            // DNS lookup to check if domain exists
+            dns.resolve(domain, 'MX', (err, addresses) => {
+                if (err || !addresses.length) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        })
+        if(!domainExist){
+            return res.status(400).json({message: 'Invalid Email Domain'});
+        }
+
+        //check if user with the same email already exists
+        let user = await User.findOne({email});
+        if (user) {
+            return res.status(400).json({message: 'User with this email already exists'});
+        }
+
+        await UserEmailOtp.deleteMany({ email });
+
+
+        const otpNumber = Math.floor(100000 + Math.random() * 900000); // Generate a random 6-digit number
+
+        const otp = `${otpNumber}`;
+        
+        
+
+
+        const to = email;
+        const subject = `Your Verification Code - ${otp}`;
+        const html = `
+        <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
+        <h2>Pet Planet</h2>
+        <h4>Verify your email</h4>
+        <hr/>
+        <p>Use this code for setting up registration:</p>
+        <h1>${otp}</h1>
+        <p>This code will expire in 30 Minutes</p>
+        </div>
+        `;
+        SendMail(process.env.EMAIL, to, subject, html)
+        .then(async(result) => {
+            const userOtp = new UserEmailOtp({email, otp});
+            await userOtp.save();
+            res.status(200).json({message: 'OTP sent to Email Successfully'});
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(400).json({message: 'Failed to send OTP'});
+        });
+
+    } catch (error) {
+        console.error("Error in userSendOtp:" + error.message);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+const RegisterUser = async(req, res) => {
+    try {
+        //Extract user input from request body
+        const {fullName, email, otp, dateOfBirth, mobileNumber, password, place, pinCode,  landMark, doorNumber, state, district, taluk, village, acceptTerms} = req.body;
+        
+        
+
+
+        let profileImageUrl = null;
+        if (req.file) {
+            profileImageUrl = req.file.filename;
+        }
+
+
+        const cleanup = async() => {
+            if(req.file){
+                await DeleteFile(req.file.path);
+            }
+        }
+
+        if(!fullName){
+            await cleanup();
+            return res.status(400).json({message: 'Full name is required.'});
+        }
+        if(!email){
+            await cleanup();
+            return res.status(400).json({message: 'email is required.'});
+        }
+        if(!dateOfBirth){
+            await cleanup();
+            return res.status(400).json({message: 'date of birth is required.'});
+        }
+        if(!mobileNumber){
+            await cleanup();
+            return res.status(400).json({message: 'mobile number is required.'});
+        }
+        if(!password){
+            await cleanup();
+            return res.status(400).json({message: 'password is required.'});
+        }
+        
+        
+
+
+        if(acceptTerms != 'true'){
+            await cleanup();
+            return res.status(400).json({message: 'Please accept the terms and conditions to proceed with registration.'});
+        }
+
+        //check does email exist in UserEmailOtp collection
+        let userOtpInfo = await UserEmailOtp.findOne({email});
+        if (!userOtpInfo) {
+            await cleanup();
+            return res.status(400).json({message: 'Registration cannot proceed without OTP verification. Please send an OTP first.'});
+        }
+        //check if user with the same email already exists
+        let user = await User.findOne({email});
+        if (user) {
+            await cleanup();
+            return res.status(400).json({message: 'User with this email already exists'});
+        }
+        
+
+        const currentTime = Date.now();
+        const expiryTime = userOtpInfo.createdAt.getTime() + userRigisterOtpExpireTime;
+        if(currentTime > expiryTime){
+            await cleanup();
+            return res.status(400).json({message: 'OTP expired. Send a new OTP.'});
+        }
+
+        if(otp != userOtpInfo.otp){
+            await cleanup();
+            return res.status(400).json({message: "The OTP you entered is incorrect. Please ensure you've entered the correct code sent to your email"});
+        }
+
+        
+        const userSave = new User({fullName, email, password, dateOfBirth, mobileNumber, profileImageUrl, place, pinCode, landMark, doorNumber, state, district, taluk, village});
+        await userSave.save();
+    
+        res.status(200).json({message: 'Success! Your registration is complete.'});
+        
+    } catch (error) {
+        console.error("Error in RegisterUser:" + error.message);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+const LoginUser = async(req, res) => {
+    try {
+        const {email, password} = req.body;
+        if(!email){
+            return res.status(400).json({message:"Email is Missing"});
+        }
+        if(!password){
+            return res.status(400).json({message:"Password is Missing"});
+        }
+
+        // Find the seller by email
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            // Seller with the provided email does not exist
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Compare the provided password with the hashed password stored in the database
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            // Password is incorrect
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ _id: user._id, type: "user" }, process.env.jwt_secret, { expiresIn: '28d' });
+
+        res.json({token});
+
+
+    } catch (error) {
+        console.error("Error in LoginUser:" + error.message);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+
+
+module.exports = {RegisterSeller, SellerSendOtp, LoginSeller, AdminLogin, SendMail, UserSendOtp, RegisterUser, LoginUser};
