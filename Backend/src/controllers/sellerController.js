@@ -391,9 +391,9 @@ const deleteProduct = async(req, res) => {
         }
 
         const deletedProduct = await Product.findByIdAndDelete(productId);
-        if(deletedProduct){
-            await DeleteFile(filePath + deletedProduct.photo);
-        }
+        // if(deletedProduct){
+        //     await DeleteFile(filePath + deletedProduct.photo);
+        // }
         return res.status(200).json({message:'Product deleted Successfully'});
 
     } catch (error) {
