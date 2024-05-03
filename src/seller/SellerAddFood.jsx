@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddFood.css';
 
 const SellerAddFood = () => {
+
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
     const [formData, setFormData] = useState({
       foodType: '',
       companyName:'',
@@ -25,16 +28,41 @@ const SellerAddFood = () => {
     };
   
     const handleSubmit = (e) => {
+
       e.preventDefault();
 
+      if(isSubmitted){
+        return;
+      }
+
+      if(formData.quantity <= 0){
+        toast.error('Invalid Quantity Value');
+        return;
+      }
       const isConfirmed = window.confirm('Are you sure you want sell this product');
 
       if (isConfirmed) {
-        console.log('Form submitted successfully!');
-        console.log('Form Data:', formData);
-      } else {
-        console.log('Form submission cancelled.');
+        isSubmitted(true);
+
+        try{
+
+        const formDataToSend = new FormData();
+
+        formDataToSend.append('companyName',formData.companyName);
+        formDataToSend.append('type',formData.foodType);
+        formDataToSend.append('photo',formData.foodImage);
+        formDataToSend.append('price',formData.price);
+
+        if(formData.quantity > 0){
+          formDataToSend.append('quantity', formData.quantity);
+        }
+        formDataToSend.append('weight', formData.weight);
+        formDataToSend.append('description', formData.description);
       }
+      catch{
+        
+      }
+    }
     };
   
     return (
