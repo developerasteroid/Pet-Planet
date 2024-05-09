@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import './css/SellerManagePetComponent.css';
+import { useNavigate } from 'react-router-dom';
+import sellerAxiosInstance from '../helper/sellerAxios';
+import { toast } from 'react-toastify';
 
 
 const SellerManagePetFoodComponent = (props) => {
 
   const [isChanged, setIsChanged] = useState(false);
+  const navigate= useNavigate();
   const [data, setData] = useState({
     Quantity: props.Quantity || 0,
     Price: props.Price || 0
@@ -16,23 +20,65 @@ const SellerManagePetFoodComponent = (props) => {
     setData({ ...data, [name]: value });
   };
 
-  const handleSaveChanges = (e) => {
+  const handleSaveChanges = async(e) => {
 
     e.preventDefault();
 
       const isConfirmed = window.confirm('Are you sure you want to edit this product');
 
       if (isConfirmed) {
-        console.log('Form edited successfully!');
-        console.log('Form Data:', data);
+        setIsChanged(false);
+        try{
+          const response = await sellerAxiosInstance.post('api/seller/update/product',{productId:props.id, quantity: data.Quantity, price: data.Price});
+
+          if(response.status == 200){
+            toast.success("Product updated successfully");
+            setIsChanged(false);
+          }
+        }
+        catch (error) {
+          setIsChanged(true);
+          if(error.response){
+            if(error.response.status === 401){
+              navigate('/seller/login', {replace: true});
+            } else if(error.response.data && error.response.data.message){
+              toast.error(error.response.data.message);
+            } else {
+                toast.error(error.message);
+            }
+          } else {
+            toast.error(error.message);
+          }
+        }
       } else {
         console.log('data updation cancelled.');
       } 
  
   };
 
-  const handleDeleteBtn = () => {
-    console.log('Deleted');
+  const handleDeleteBtn = async() => {
+    const isConfirmed = window.confirm('Are you sure you want to delete this product');
+    if (isConfirmed) {
+      try {
+        const response = await sellerAxiosInstance.post('api/seller/delete/product', {productId:props.id});
+        if(response.status == 200){
+          props.removeCallBack(props.id);
+          toast.success("Product Deleted successfully");
+        }
+      } catch (error) {
+        if(error.response){
+          if(error.response.status === 401){
+            navigate('/seller/login', {replace: true});
+          } else if(error.response.data && error.response.data.message){
+            toast.error(error.response.data.message);
+          } else {
+              toast.error(error.message);
+          }
+        } else {
+          toast.error(error.message);
+        }
+      }
+    }
   };
   return (
     <div className="ManagePet-Card">

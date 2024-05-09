@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddFood.css';
+import sellerAxiosInstance from '../helper/sellerAxios'
 
 const SellerAddFood = () => {
 
@@ -27,7 +28,7 @@ const SellerAddFood = () => {
       setFormData({ ...formData, [e.target.name]: file });
     };
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
 
       e.preventDefault();
 
@@ -42,26 +43,49 @@ const SellerAddFood = () => {
       const isConfirmed = window.confirm('Are you sure you want sell this product');
 
       if (isConfirmed) {
-        isSubmitted(true);
+        setIsSubmitted(true);
 
         try{
 
         const formDataToSend = new FormData();
 
         formDataToSend.append('companyName',formData.companyName);
+        formDataToSend.append('name',formData.name);
         formDataToSend.append('type',formData.foodType);
         formDataToSend.append('photo',formData.foodImage);
         formDataToSend.append('price',formData.price);
-
-        if(formData.quantity > 0){
-          formDataToSend.append('quantity', formData.quantity);
-        }
+        formDataToSend.append('quantity', formData.quantity);
         formDataToSend.append('weight', formData.weight);
         formDataToSend.append('description', formData.description);
+
+        const response = await sellerAxiosInstance.post('api/seller/add/product/food',formDataToSend,{
+          headers: {
+            'Content-Type':'multipart/form-data'
+          }
+        });
+        if(response.status===200 && response.data && response.data.message){
+          toast.success(response.data.message)
+        }
+        console.log(response);
       }
-      catch{
-        
+      catch(error){
+        if(error.response){
+          if(error.response.status === 401){
+            navigate('/seller/login',{replace: true});
+          }
+          else if(error.response.data && error.response.data.message){
+            toast.error(error.response.data.message);
+          } else{
+            toast.error(error.message)
+          }
+        } else{
+          toast.error(error.message)
+        }
       }
+      setIsSubmitted(false);
+    }
+    else{
+      //if cancelled
     }
     };
   
@@ -99,6 +123,17 @@ const SellerAddFood = () => {
                 id="companyName"
                 className="food-input-field"
                 value={formData.companyName}
+                onChange={handleInputChange}
+                required
+              />
+
+            <label htmlFor="name">Title of Porduct:</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                className="food-input-field"
+                value={formData.name}
                 onChange={handleInputChange}
                 required
               />

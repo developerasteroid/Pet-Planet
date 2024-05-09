@@ -12,6 +12,7 @@ const SellerAddPet = () => {
     const [formData, setFormData] = useState({
       petType: '',
       petBreed:'',
+      name:'',
       dob: '',
       quantity: '',
       gender: '',
@@ -74,32 +75,32 @@ const SellerAddPet = () => {
           const formDataToSend = new FormData();
 
 
-          formDataToSend.append('name', formData.petBreed);
-          formDataToSend.append('price', formData.price);
+          formDataToSend.append('name', formData.name);1
+          formDataToSend.append('price', formData.price);1
           formDataToSend.append('photo',formData.petImage);
-          formDataToSend.append('weight', formData.weight);
-          formDataToSend.append('description', formData.description);
-          formDataToSend.append('type', formData.petType);
-          formDataToSend.append('breed', formData.petBreed);
-          formDataToSend.append('dob', formData.dob);
+          formDataToSend.append('weight', formData.weight);1
+          formDataToSend.append('description', formData.description);1
+          formDataToSend.append('type', formData.petType);1
+          formDataToSend.append('breed', formData.petBreed);1
+          formDataToSend.append('dob', formData.dob);1
           
-          formDataToSend.append('height', formData.height);
-          formDataToSend.append('width', formData.width);
-          formDataToSend.append('length', formData.length);
-          formDataToSend.append('certified', formData.certified);
+          formDataToSend.append('height', formData.height);1
+          formDataToSend.append('width', formData.width);1
+          formDataToSend.append('length', formData.length);1
+          formDataToSend.append('certified', formData.certified);1
           if(formData.certified)
             formDataToSend.append('certificatePhoto', formData.certificateImage);
           if(formData.bloodline){
-            formDataToSend.append('fatherPhoto', formData.fatherImage);
-            formDataToSend.append('motherPhoto', formData.motherImage);
-            formDataToSend.append('fatherDetail','height: '+formData.fatherHeight + '\nweight: '+ formData.fatherWeight);
-            formDataToSend.append('motherDetail', 'height: '+formData.motherHeight + '\nweight: '+ formData.motherWeight);  
+            formDataToSend.append('fatherPhoto', formData.fatherImage);1
+            formDataToSend.append('motherPhoto', formData.motherImage);1
+            formDataToSend.append('fatherDetail','height: '+formData.fatherHeight + '\nweight: '+ formData.fatherWeight);1
+            formDataToSend.append('motherDetail', 'height: '+formData.motherHeight + '\nweight: '+ formData.motherWeight);  1
           }
 
           //for male pet
           if(formData.maleQuantity > 0 && formData.quantity > 1){
-            formDataToSend.append('quantity', formData.maleQuantity);
-            formDataToSend.append('gender', 'male');
+            formDataToSend.append('quantity', formData.maleQuantity);1
+            formDataToSend.append('gender', 'male');1
             
             let response = await sellerAxiosInstance.post('api/seller/add/product/pet', formDataToSend, {
               headers: {
@@ -215,9 +216,18 @@ const SellerAddPet = () => {
                 
                 </>
                 }
-                
-
               </select>
+
+              <label htmlFor="name">Title of Product:</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                className="food-input-field"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
   
               <label htmlFor="age">Date of Birth:</label>
               <input

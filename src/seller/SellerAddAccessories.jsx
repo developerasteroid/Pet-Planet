@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddAccessories.css';
+import sellerAxiosInstance from '../helper/sellerAxios'
 
 const SellerAddAccessories = () => {
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
       acceType: '',
       name:'',
@@ -11,7 +13,7 @@ const SellerAddAccessories = () => {
       quantity: '',
       length: '',
       width: '',
-      thick: '',
+      height: '',
       weight:'',
       acceImage: null,
       price:'',
@@ -28,17 +30,67 @@ const SellerAddAccessories = () => {
       setFormData({ ...formData, [e.target.name]: file });
     };
   
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async(e) => {
+      e.preventDefault();
 
-        const isConfirmed = window.confirm('Are you sure you want sell this product');
+      if(isSubmitted){
+        return;
+      }
 
-        if (isConfirmed) {
-          console.log('Form submitted successfully!');
-          console.log('Form Data:', formData);
-        } else {
-          console.log('Form submission cancelled.');
+      if(formData.quantity <= 0){
+        toast.error('Invalid Quantity Value');
+        return;
+      }
+      const isConfirmed = window.confirm('Are you sure you want sell this product');
+
+      if (isConfirmed) {
+        setIsSubmitted(true);
+
+        try{
+
+        const formDataToSend = new FormData();
+
+        formDataToSend.append('type',formData.acceType);
+        formDataToSend.append('name',formData.name);
+        formDataToSend.append('companyName',formData.companyName);
+        formDataToSend.append('photo',formData.acceImage);
+        formDataToSend.append('price',formData.price);
+        formDataToSend.append('quantity', formData.quantity);
+        formDataToSend.append('weight', formData.weight);
+        formDataToSend.append('length', formData.length);
+        formDataToSend.append('width', formData.width);
+        formDataToSend.append('height', formData.height);
+        formDataToSend.append('description', formData.description);
+
+        const response = await sellerAxiosInstance.post('api/seller/add/product/accessory',formDataToSend,{
+          headers: {
+            'Content-Type':'multipart/form-data'
+          }
+        });
+        if(response.status===200 && response.data && response.data.message){
+          toast.success(response.data.message)
         }
+        console.log(response);
+      }
+      catch(error){
+        if(error.response){
+          if(error.response.status === 401){
+            navigate('/seller/login',{replace: true});
+          }
+          else if(error.response.data && error.response.data.message){
+            toast.error(error.response.data.message);
+          } else{
+            toast.error(error.message)
+          }
+        } else{
+          toast.error(error.message)
+        }
+      }
+      setIsSubmitted(false);
+    }
+    else{
+      //if cancelled
+    }
       };
       
   
@@ -72,17 +124,7 @@ const SellerAddAccessories = () => {
 
               </select>
   
-              <label htmlFor="name">Specific name of product:</label>
-              <input
-                type="text"
-                placeholder='Specific Name of your product (*Required)'
-                name="name"
-                id="name"
-                className="acce-input-field"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
+             
                <label htmlFor="companyName">Company Name:</label>
               <input
                 type="text"
@@ -91,6 +133,17 @@ const SellerAddAccessories = () => {
                 id="companyName"
                 className="acce-input-field"
                 value={formData.companyName}
+                onChange={handleInputChange}
+                required
+              />
+               <label htmlFor="name">Title of product:</label>
+              <input
+                type="text"
+                placeholder='Title of product'
+                name="name"
+                id="name"
+                className="acce-input-field"
+                value={formData.name}
                 onChange={handleInputChange}
                 required
               />
@@ -133,14 +186,14 @@ const SellerAddAccessories = () => {
                 required
               />
 
-            <label htmlFor="thick">Thickness of Product:</label>
+            <label htmlFor="height">Height of Product:</label>
               <input
                 type="number"
-                name="thick"
-                placeholder='Thickness in cm (*Required)'
-                id="thick"
+                name="height"
+                placeholder='Height in cm (*Required)'
+                id="height"
                 className="acce-input-field"
-                value={formData.thick}
+                value={formData.height}
                 onChange={handleInputChange}
                 required
               />

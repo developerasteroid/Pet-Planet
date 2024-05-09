@@ -82,6 +82,7 @@ const Products = () => {
         </div>
 
         {filter.map((product) => {
+          console.log(product);
           return (
             <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
               <div className="card text-center h-100" key={product.id}>

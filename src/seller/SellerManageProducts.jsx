@@ -48,17 +48,18 @@ const SellerManageProducts = () => {
     <>
     {
       productsData.map((product, index) => {
+        
         if(product.category == "pet"){
           return(
-            <SellerManagePetComponent key={index} id={product._id} removeCallBack={removeCallBack} petName={product.name} petBreed={product.breed} petImage={product.photo} gender={product.gender} Quantity={product.quantity} Price={product.price}/>
+            <SellerManagePetComponent key={index} id={product._id} removeCallBack={removeCallBack} petName={product.type} petBreed={product.breed} petImage={product.photo} gender={product.gender} Quantity={product.quantity} Price={product.price}/>
           );
         } else if(product.category == "food") {
           return(
-            <SellerManagePetFoodComponent key={index} id={product._id} foodType={product.type} companyName={product.companyName} foodImage={product.photo} Quantity={product.quantity} Weight={product.weight} Price={product.price} />
+            <SellerManagePetFoodComponent key={index} id={product._id} removeCallBack={removeCallBack} foodType={product.type} companyName={product.companyName} foodImage={product.photo} Quantity={product.quantity} Weight={product.weight} Price={product.price} />
           );
         } else if(product.category == "accessory"){
           return(
-            <SellerManagePetAcceComponent key={index} id={product._id} AcceType={product.type} companyName={product.companyName} acceImage={product.photo} Quantity={product.quantity} Price={product.price}/>
+            <SellerManagePetAcceComponent key={index} id={product._id} removeCallBack={removeCallBack} AcceType={product.type} companyName={product.companyName} acceImage={product.photo} Quantity={product.quantity} Price={product.price}/>
           );
         }
       })
