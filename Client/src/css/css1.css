@@ -1,0 +1,9 @@
+.acceptterms .terms{
+    text-decoration: none;
+    color: black;
+}
+.acceptterms .terms:hover{
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
