@@ -288,24 +288,24 @@ const SellerAddPet = () => {
                   <input
                     type="number"
                     name="maleQuantity"
-                    placeholder='Enter male quantity (*Required)'
+                    placeholder='Enter male quantity'
                     id="maleQuantity"
                     className="pet-input-field"
                     value={formData.maleQuantity}
                     onChange={handleInputChange}
-                    required
+                    
                   />
   
                   <label htmlFor="femaleQuantity">Female Quantity:</label>
                   <input
                     type="number"
                     name="femaleQuantity"
-                    placeholder='Enter female quantity (*Required)'
+                    placeholder='Enter female quantity'
                     id="femaleQuantity"
                     className="pet-input-field"
                     value={formData.femaleQuantity}
                     onChange={handleInputChange}
-                    required
+                    
                   />
                 </>
               )}

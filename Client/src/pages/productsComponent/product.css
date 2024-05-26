@@ -1,0 +1,55 @@
+.pet-component {
+    background-color: #fff; /* White background */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px; /* Center content and limit max width */
+    margin: auto;
+  }
+  
+  .pet-component img {
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .pet-component img:hover {
+    transform: scale(1.05);
+  }
+  
+  .pet-component .text-primary {
+    color: #007bff !important;
+  }
+  
+  .pet-component .text-secondary {
+    color: #6c757d !important;
+  }
+  
+  .pet-component .text-success {
+    color: #28a745 !important;
+  }
+  
+  .pet-component .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+  }
+  
+  .pet-component .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .pet-component .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .pet-component .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  div .section{
+    font-size: large;
+    color: red;
+    
+  }
+  
