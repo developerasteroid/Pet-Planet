@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Footer, Navbar } from "../components";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const  [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    
+  }
   return (
     <>
       <Navbar />
@@ -11,14 +20,17 @@ const Login = () => {
         <hr />
         <div class="row my-4 h-100">
           <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div class="my-3">
                 <label for="display-4">Email address</label>
                 <input
                   type="email"
                   class="form-control"
                   id="floatingInput"
+                  value={email}
+                  onChange={(e)=>{setEmail(e.target.value)}}
                   placeholder="name@example.com"
+                  required
                 />
               </div>
               <div class="my-3">
@@ -27,14 +39,17 @@ const Login = () => {
                   type="password"
                   class="form-control"
                   id="floatingPassword"
+                  value={password}
+                  onChange={(e)=>{setPassword(e.target.value)}}
                   placeholder="Password"
+                  required
                 />
               </div>
               <div className="my-3">
                 <p>New Here? <Link to="/register" className="text-decoration-underline text-info">Register</Link> </p>
               </div>
               <div className="text-center">
-                <button class="my-2 mx-auto btn btn-dark" type="submit" disabled>
+                <button class="my-2 mx-auto btn btn-dark" type="submit" disabled={isSubmitted}>
                   Login
                 </button>
               </div>

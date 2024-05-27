@@ -256,5 +256,18 @@ const getCartItems = async(req, res) => {
 
 
 
+const orderProduct = async(req, res) => {
+    try {
+        const userId = req.params.userId
+        const {} = req.body;
+
+    } catch (error){
+        console.error('Error in orderProduct:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+
 
 module.exports = {getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems};
