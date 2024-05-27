@@ -8,7 +8,7 @@ function Home() {
 
   useEffect(() => {
     dispatch(fetchData());
-  }, [dispatch]);
+  }, []);
 
 
   return (

@@ -1,65 +1,115 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import { Link, useNavigate } from "react-router-dom";
 import { Footer, Navbar } from "../components";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchData } from "../redux/action";
+import { toast } from "react-toastify";
+import axiosInstance from "../helper/axiosInstance";
 
-const Checkout = () => {
-  const [formdata, setformdata] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phno: "",
-    address: "",
-    country: "",
-    state: "",
-    zip: ""
-  });
 
-  const handleOnInputchange = (e) => {
-    const { name, value } = e.target;
-    setformdata({ ...formdata, [name]: value });
-  };
-
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
-    // Add submit logic here
-  };
-
-  const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state);
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
-
-  const EmptyCart = () => {
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12 py-5 bg-light text-center">
-            <h4 className="p-3 display-5">No item in Cart</h4>
-            <Link to="/" className="btn btn-outline-dark mx-4">
-              <i className="fa fa-arrow-left"></i> Continue Shopping
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const ShowCheckout = () => {
-    let subtotal = 0;
-    let shipping = 0;
-    let totalItems = 0;
-
-    data.forEach((item) => {
-      subtotal += item.product.price * item.quantity;
-      totalItems += item.quantity;
+export default function Checkout () {
+    const [cart, setCart] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [formdata, setformdata] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phno: "",
+        address: "",
+        country: "",
+        state: "",
+        zip: ""
     });
 
+    const handleOnInputchange = (e) => {
+        const { name, value } = e.target;
+        setformdata((prevFormdata) => ({ ...prevFormdata, [name]: value }));
+    };
+
+    const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    // Add submit logic here
+    };
+
+    const navigate = useNavigate();
+
+    
+    
+
+    const [totalItems, setToatalItems] = useState(0);
+    const [subtotal, setSubtotal] = useState(0);
+    const [shipping, setShipping] = useState(0);
+
+
+    useEffect(()=>{
+
+        (async()=>{
+            try {
+                const response = await axiosInstance.get('api/user/cart');
+                if(response.status==200 && response.data){
+                    setCart(response.data);
+                    let tItems = 0;
+                    let sTotal = 0;
+                    response.data.forEach(item => {
+                        sTotal += item.product.price * item.quantity;
+                        tItems += item.quantity;
+                    });
+                    setSubtotal(sTotal);
+                    setToatalItems(tItems);
+                    setIsLoading(false);
+                }
+            } catch (error){
+                if(error.response && error.response.status == 401){
+                    navigate('/login');
+                } else if(error.response && error.response.data && error.response.data.message){
+                    toast.error(error.response.data.message);
+                } else {
+                    toast.error(error.message);
+                }
+            }
+        })();
+        
+    }, [axiosInstance]);
+    
+
+
+
+    if(isLoading){
+        return (
+            <>
+            <Navbar />
+            <div className="d-flex justify-content-center align-items-center" style={{height: 400}}>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <Footer />
+            </>
+
+        )
+    }
+
+    if(cart.length == 0){
+        return (
+            <>
+            <Navbar />
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12 py-5 bg-light text-center">
+                  <h4 className="p-3 display-5">No item in Cart</h4>
+                  <Link to="/" className="btn btn-outline-dark mx-4">
+                    <i className="fa fa-arrow-left"></i> Continue Shopping
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <Footer />
+            </>
+          );
+    }
+
     return (
-      <>
+        <>
+        <Navbar />
         <div className="container py-5">
           <div className="row my-4">
             <div className="col-md-5 col-lg-4 order-md-last">
@@ -70,8 +120,8 @@ const Checkout = () => {
                 <div className="card-body">
                   <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                      Products ({totalItems})
-                      <span>Rs {Math.round(subtotal)}</span>
+                      Products {totalItems}
+                      <span>Rs {subtotal}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                       Shipping
@@ -82,7 +132,7 @@ const Checkout = () => {
                         <strong>Total amount</strong>
                       </div>
                       <span>
-                        <strong>Rs {Math.round(subtotal + shipping)}</strong>
+                        <strong>Rs {Math.round(shipping + subtotal)}</strong>
                       </span>
                     </li>
                   </ul>
@@ -276,21 +326,7 @@ const Checkout = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </>
-    );
-  };
-
-  return (
-    <>
-      <Navbar />
-      <div className="container my-3 py-3">
-        <h1 className="text-center">Checkout</h1>
-        <hr />
-        {data.length ? <ShowCheckout /> : <EmptyCart />}
-      </div>
-      <Footer />
-    </>
-  );
-};
-
-export default Checkout;
+    )
+}

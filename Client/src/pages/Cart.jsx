@@ -8,13 +8,27 @@ import { toast } from "react-toastify";
 import { logout } from "../helper/functions";
 
 const Cart = () => {
-  const { data, loading, error } = useSelector(state => state);
+  const data = useSelector(state => state.data);
+  const cartError = useSelector(state => state.error);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(()=>{
     dispatch(fetchData());
   },[dispatch]);
+
+  useEffect(()=>{
+    if(cartError){
+      if(cartError.response && cartError.response.status == 401){
+        navigate('/login');
+      } else if(cartError.response && cartError.response.data && cartError.response.data.message){
+          toast.error(cartError.response.data.message);
+      } else {
+          toast.error(cartError.message);
+      }
+    }
+  }, [cartError])
+
 
 
   
