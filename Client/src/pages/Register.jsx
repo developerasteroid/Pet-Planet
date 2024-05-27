@@ -50,6 +50,7 @@ const Register = () => {
                                     className="form-control"
                                     id="Name"
                                     placeholder="Enter Your Name"
+                                    required
                                 />
                             </div>
                             <div className="form my-3">
@@ -62,6 +63,7 @@ const Register = () => {
                                     className="form-control"
                                     id="Email"
                                     placeholder="name@example.com"
+                                    required
                                 />
                             </div>
                             <div className="form my-3">
@@ -73,6 +75,7 @@ const Register = () => {
                                     onChange={handleInputChange}
                                     className="form-control"
                                     id="dob"
+                                    required
                                 />
                             </div>
                             <div className="form my-3">
@@ -89,6 +92,7 @@ const Register = () => {
                                         MozAppearance: 'textfield',
                                         WebkitAppearance: 'none',
                                     }}
+                                    required
                                 />
                                 <style>
                                     {`
@@ -113,6 +117,7 @@ const Register = () => {
                                     className="form-control"
                                     id="Password"
                                     placeholder="Password"
+                                    required
                                 />
                             </div>
                             <div className="form my-3 acceptterms">
@@ -123,6 +128,7 @@ const Register = () => {
                                     //checked={formdata.acceptterms} // Ensure checked attribute is set based on state
                                     onChange={handleAcceptTerm}
                                     id="acceptterms" // Make sure this ID matches the "for" attribute of the label
+                                    required
                                 />
                                  <Link to="/terms" className="terms">accept terms and policy</Link> </p>
                                     
@@ -143,6 +149,7 @@ const Register = () => {
                                     className="form-control"
                                     id="otp"
                                     placeholder="Enter OTP"
+                                    required
                                 />
                             </div>
 
@@ -153,7 +160,7 @@ const Register = () => {
                                 <button 
                                 className="my-2 mx-auto btn btn-dark" 
                                 type="submit" 
-                                disabled
+                                
                                 >
                                     Register
                                 </button>
