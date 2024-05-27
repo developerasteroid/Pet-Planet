@@ -14,7 +14,7 @@ import SellerAddFood from './seller/SellerAddFood';
 import SellerAddAccessories from './seller/SellerAddAccessories';
 import SellerManageProducts from './seller/SellerManageProducts';
 import SellerOrderRequestManagePage from './seller/manageOrderRequest/SellerOrderRequestManagePage';
-import ManageOrders from './seller/manageOrders/ManageOrders';
+import ManageOrders from './seller/manageOrderStatus/ManageOrders'
 import ProductsSoldPage from './seller/soldHistory/ProductsSoldPage';
 import AdminSellerNewRequest from './admin/AdminSellerNewRequest';
 import ManageSellers from './admin/manageSellers/ManageSellers';
