@@ -233,6 +233,8 @@ const getCartItems = async(req, res) => {
         }
         const cartItems = await CartItem.find({ cart:cart._id}).populate('product');
         const data = cartItems.map(cartItem => {
+            if(cartItem.product != null){
+
             // Clone the cartItem object to avoid modifying the original
             const modifiedCartItem = { ...cartItem.toObject() };
 
@@ -246,6 +248,8 @@ const getCartItems = async(req, res) => {
             delete modifiedCartItem.product.createdAt;
             delete modifiedCartItem.product.__v;
             return modifiedCartItem;
+        }
+
         })
         res.json(data);
     } catch (error) {
