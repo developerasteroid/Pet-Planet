@@ -1,12 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Footer, Navbar } from "../components";
-import { useSelector, useDispatch } from "react-redux";
-import { addCart, delCart } from "../redux/action";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchData } from './../redux/action';
+import axiosInstance from "../helper/axiosInstance";
+import { toast } from "react-toastify";
+import { logout } from "../helper/functions";
 
 const Cart = () => {
-  const state = useSelector((state) => state.handleCart);
+  const { data, loading, error } = useSelector(state => state);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    dispatch(fetchData());
+  },[dispatch]);
+
+
+  
+  const addproductToCart = async(productId) => {
+    try {
+      const response = await axiosInstance.post('api/user/cart/item/add', {
+        productId,
+        quantity: 1
+      });
+      dispatch(fetchData());
+
+      // toast.info("Product added to cart");
+    } catch(error) {
+      if(error.response && error.response.status == 401){
+        logout();
+        navigate('/login');
+      } else if(error.response && error.response.data && error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
+
+  const removeProductFromCart = async(productId) => {
+    try {
+      const response = await axiosInstance.post('api/user/cart/item/remove', {
+        productId,
+        quantity: 1
+      });
+      dispatch(fetchData());
+
+      // toast.info("Product removed from cart");
+    } catch(error) {
+      if(error.response && error.response.status == 401){
+        logout();
+        navigate('/login');
+      } else if(error.response && error.response.data && error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
+  
 
   const EmptyCart = () => {
     return (
@@ -23,23 +76,17 @@ const Cart = () => {
     );
   };
 
-  const addItem = (product) => {
-    dispatch(addCart(product));
-  };
-  const removeItem = (product) => {
-    dispatch(delCart(product));
-  };
 
   const ShowCart = () => {
     let subtotal = 0;
     let shipping = 30.0;
     let totalItems = 0;
-    state.map((item) => {
-      return (subtotal += item.price * item.qty);
+    data.map((item) => {
+      return (subtotal += item.product.price * item.quantity);
     });
 
-    state.map((item) => {
-      return (totalItems += item.qty);
+    data.map((item) => {
+      return (totalItems += item.quantity);
     });
     return (
       <>
@@ -52,9 +99,9 @@ const Cart = () => {
                     <h5 className="mb-0">Item List</h5>
                   </div>
                   <div className="card-body">
-                    {state.map((item) => {
+                    {data.map((item) => {
                       return (
-                        <div key={item.id}>
+                        <div key={item._id}>
                           <div className="row d-flex align-items-center">
                             <div className="col-lg-3 col-md-12">
                               <div
@@ -62,9 +109,9 @@ const Cart = () => {
                                 data-mdb-ripple-color="light"
                               >
                                 <img
-                                  src={item.photo}
+                                  src={item.product.photo}
                                   // className="w-100"
-                                  alt={item.name}
+                                  alt={item.product.name}
                                   width={100}
                                   height={75}
                                 />
@@ -73,7 +120,7 @@ const Cart = () => {
 
                             <div className="col-lg-5 col-md-6">
                               <p>
-                                <strong>{item.name}</strong>
+                                <strong>{item.product.name}</strong>
                               </p>
                               {/* <p>Color: blue</p>
                               <p>Size: M</p> */}
@@ -87,18 +134,18 @@ const Cart = () => {
                                 <button
                                   className="btn px-3"
                                   onClick={() => {
-                                    removeItem(item);
+                                    removeProductFromCart(item.product._id)
                                   }}
                                 >
                                   <i className="fas fa-minus"></i>
                                 </button>
 
-                                <p className="mx-5">{item.qty}</p>
+                                <p className="mx-5">{item.quantity}</p>
 
                                 <button
                                   className="btn px-3"
                                   onClick={() => {
-                                    addItem(item);
+                                    addproductToCart(item.product._id)
                                   }}
                                 >
                                   <i className="fas fa-plus"></i>
@@ -107,8 +154,8 @@ const Cart = () => {
 
                               <p className="text-start text-md-center">
                                 <strong>
-                                  <span className="text-muted">{item.qty}</span>{" "}
-                                  x Rs{item.price}
+                                  <span className="text-muted">{item.quantity}</span>{" "}
+                                  x Rs{item.product.price}
                                 </strong>
                               </p>
                             </div>
@@ -167,7 +214,7 @@ const Cart = () => {
       <div className="container my-3 py-3">
         <h1 className="text-center">Cart</h1>
         <hr />
-        {state.length > 0 ? <ShowCart /> : <EmptyCart />}
+        {data.length > 0 ? <ShowCart /> : <EmptyCart />}
       </div>
       <Footer />
     </>

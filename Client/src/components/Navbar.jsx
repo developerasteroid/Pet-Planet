@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { logout } from '../helper/functions'
 
 const Navbar = () => {
-    const state = useSelector(state => state.handleCart)
+    const state = useSelector(state => state.data)
     const [isLoggedIn, setisLoggedIn] = useState(false);
 
     useEffect(()=> {

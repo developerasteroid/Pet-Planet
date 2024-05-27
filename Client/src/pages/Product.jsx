@@ -3,12 +3,15 @@ import Skeleton from "react-loading-skeleton";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import { useDispatch } from "react-redux";
-import { addCart } from "../redux/action";
 
 import { Footer, Navbar } from "../components";
 import PetComponent from "./productsComponent/PetComponent";
 import AccessoryComponent from "./productsComponent/AccessoryComponent";
 import FoodComponent from "./productsComponent/FoodComponent";
+import { logout } from "../helper/functions";
+import { toast } from "react-toastify";
+import axiosInstance from "../helper/axiosInstance";
+import { fetchData } from "../redux/action";
 
 const Product = () => {
   const { id } = useParams();
@@ -27,11 +30,27 @@ const Product = () => {
   //     navigate(`/login`,{ state: { data: `/product/${id}` } });
   //   }
   // }, []);
-  
 
-  const addProduct = (product) => {
-    dispatch(addCart(product));
-  };
+  const addproductToCart = async(productId) => {
+    try {
+      const response = await axiosInstance.post('api/user/cart/item/add', {
+        productId,
+        quantity: 1
+      });
+      dispatch(fetchData());
+      toast.info('Product added to cart');
+    } catch(error) {
+      if(error.response && error.response.status == 401){
+        logout();
+        navigate('/login');
+      } else if(error.response && error.response.data && error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
+  
 
   useEffect(() => {
     const getProduct = async () => {
@@ -83,10 +102,10 @@ const Product = () => {
 
   const ShowProduct = () => {
     if (!product) return null;
-  
     if (product.category === "pet") {
       return (
         <PetComponent
+          pid={product.id}
           Photo={product.photo}
           Name={product.name}
           Breed={product.breed}
@@ -111,6 +130,7 @@ const Product = () => {
     } else if (product.category === "accessory") {
       return (
         <AccessoryComponent
+          pid={product.id}
           Photo={product.photo}
           Name={product.name}
           Category={product.category}
@@ -122,6 +142,7 @@ const Product = () => {
     } else if (product.category === "food") {
       return (
         <FoodComponent
+          pid={product.id}
           Photo={product.photo}
           Name={product.name}
           Category={product.category}
@@ -176,7 +197,7 @@ const Product = () => {
               </Link>
               <button
                 className="btn btn-dark m-1"
-                onClick={() => addProduct(item)} // Ensured addProduct is correctly called
+                onClick={() => addproductToCart(item.id)} // Ensured addProduct is correctly called
               >
                 Add to Cart
               </button>

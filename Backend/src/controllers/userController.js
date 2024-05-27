@@ -232,25 +232,26 @@ const getCartItems = async(req, res) => {
             return res.json([]);
         }
         const cartItems = await CartItem.find({ cart:cart._id}).populate('product');
-        const data = cartItems.map(cartItem => {
+        let data = cartItems.map(cartItem => {
             if(cartItem.product != null){
+                // Clone the cartItem object to avoid modifying the original
+                const modifiedCartItem = { ...cartItem.toObject() };
 
-            // Clone the cartItem object to avoid modifying the original
-            const modifiedCartItem = { ...cartItem.toObject() };
+                modifiedCartItem.totalPrice = cartItem.quantity * cartItem.product.price;
+                modifiedCartItem.product.photo = `${process.env.HOST}/image/product/${cartItem.product.photo}`;
 
-            modifiedCartItem.totalPrice = cartItem.quantity * cartItem.product.price;
-            modifiedCartItem.product.photo = `${process.env.HOST}/image/product/${cartItem.product.photo}`;
-
-            // Remove unwanted fields
-            delete modifiedCartItem.product.seller;
-            delete modifiedCartItem.product.informationId;
-            delete modifiedCartItem.product.paymentOption;
-            delete modifiedCartItem.product.createdAt;
-            delete modifiedCartItem.product.__v;
-            return modifiedCartItem;
-        }
-
+                // Remove unwanted fields
+                delete modifiedCartItem.product.seller;
+                delete modifiedCartItem.product.informationId;
+                delete modifiedCartItem.product.paymentOption;
+                delete modifiedCartItem.product.createdAt;
+                delete modifiedCartItem.product.__v;
+                return modifiedCartItem;
+            } else {
+                return null;
+            }
         })
+        data = data.filter((p)=> p != null);
         res.json(data);
     } catch (error) {
         console.error('Error in getCartItems:', error);

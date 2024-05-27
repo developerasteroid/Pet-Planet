@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addCart } from "../redux/action";
+
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../helper/functions";
+import { toast } from "react-toastify";
+import axiosInstance from "../helper/axiosInstance";
+import { fetchData } from "../redux/action";
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -15,9 +19,8 @@ const Products = () => {
 
   const dispatch = useDispatch();
 
-  const addProduct = (product) => {
-    dispatch(addCart(product))
-  }
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const getProducts = async () => {
@@ -69,6 +72,30 @@ const Products = () => {
     const updatedList = data.filter((item) => item.category === cat);
     setFilter(updatedList);
   }
+
+
+
+  const addproductToCart = async(productId) => {
+    try {
+      const response = await axiosInstance.post('api/user/cart/item/add', {
+        productId,
+        quantity: 1
+      });
+      dispatch(fetchData());
+      toast.info('Product added to cart');
+    } catch(error) {
+      if(error.response && error.response.status == 401){
+        logout();
+        navigate('/login');
+      } else if(error.response && error.response.data && error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
+
+
   const ShowProducts = () => {
     return (
       <>
@@ -109,7 +136,7 @@ const Products = () => {
                   <Link to={"/product/" + product.id} className="btn btn-dark m-1">
                     View Product
                   </Link>
-                  <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
+                  <button className="btn btn-dark m-1" onClick={() => addproductToCart(product.id)}>
                     Add to Cart
                   </button>
                 </div>

@@ -1,20 +1,19 @@
 import React from 'react';
 import { useDispatch } from "react-redux";
-import { addCart } from "../../redux/action";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './product.css';  
+import axiosInstance from '../../helper/axiosInstance';
+import { logout } from '../../helper/functions';
+import { toast } from 'react-toastify';
+import { fetchData } from '../../redux/action';
 
 const PetComponent = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const addProduct = (product) => {
-    if (product && product.id) {
-      dispatch(addCart(product));
-    } else {
-      console.error("Product is undefined or missing id");
-    }
-  };
+  
 
   const currentDate = new Date();
 
@@ -25,6 +24,28 @@ const PetComponent = (props) => {
 
   // Calculate the difference in days
   const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
+
+
+  const addproductToCart = async(productId) => {
+    try {
+      const response = await axiosInstance.post('api/user/cart/item/add', {
+        productId,
+        quantity: 1
+      });
+      dispatch(fetchData());
+
+      toast.info("Product added to cart");
+    } catch(error) {
+      if(error.response && error.response.status == 401){
+        logout();
+        navigate('/login');
+      } else if(error.response && error.response.data && error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
 
   return (
     <>
@@ -60,7 +81,7 @@ const PetComponent = (props) => {
             <div className="d-flex justify-content-center justify-content-md-start">
               <button
                 className="btn btn-outline-primary me-3"
-                onClick={() => addProduct(props.Product)} // Ensure props.Product is passed
+                onClick={() => addproductToCart(props.pid)} // Ensure props.Product is passed
               >
                 Add to Cart
               </button>
