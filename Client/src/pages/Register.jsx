@@ -14,6 +14,8 @@ const Register = () => {
         acceptterms: false
     });
 
+    const [OtpState, setOtpState] = useState(false);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setformdata({ ...formdata, [name]: value });
@@ -24,6 +26,10 @@ const Register = () => {
         setformdata({ ...formdata, acceptterms: value})
         // setformdata({ ...formdata, [name]: value });
       };
+      const handleOnclickRegister = async(e)=>{
+        e.preventDefault();
+        setOtpState(true);
+      }
 
     return (
         <>
@@ -33,7 +39,7 @@ const Register = () => {
                 <hr />
                 <div className="row my-4 h-100">
                     <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
-                        <form>
+                        <form onSubmit={handleOnclickRegister}>
                             <div className="form my-3">
                                 <label htmlFor="Name">Full Name</label>
                                 <input
@@ -125,8 +131,30 @@ const Register = () => {
                             <div className="my-3">
                                 <p>Already has an account? <Link to="/login" className="text-decoration-underline text-info">Login</Link> </p>
                             </div>
+
+                            { OtpState ? <>
+                                <div className="form my-3">
+                                <label htmlFor="otp">OTP</label>
+                                <input
+                                    type="number"
+                                    name="otp"
+                                    value={formdata.otp}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                    id="otp"
+                                    placeholder="Enter OTP"
+                                />
+                            </div>
+
+                            </> : <></> }
+
+                           
                             <div className="text-center">
-                                <button className="my-2 mx-auto btn btn-dark" type="submit" disabled>
+                                <button 
+                                className="my-2 mx-auto btn btn-dark" 
+                                type="submit" 
+                                disabled
+                                >
                                     Register
                                 </button>
                             </div>
