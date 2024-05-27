@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 
-const SellerPetOrder = (props) => {
+const SellerAcceOrder = (props) => {
 
-  const [isPacked, setIsPacked] = useState(false);
+  
   const [isOutForDelivery, setIsOutForDelivery] = useState(false);
+  const [isDelivered, setIsDelivered] = useState(false);
+  const [otp, setopt]= useState('');
 
-  const handlePackedChange = (e) => {
-    setIsPacked(e.target.checked);
+  const handleOutForDelivery = (e) => {
+    setIsOutForDelivery(e.target.checked);
     // If the first checkbox is unchecked, disable the second checkbox
     if (!e.target.checked) {
-      setIsOutForDelivery(false);
+      setIsDelivered(false);
     }
   };
 
-  const handleOutForDeliveryChange = (e) => {
+  const handleDelivered = (e) => {
     // Allow changing the state of the second checkbox only if the first checkbox is checked
-    if (isPacked) {
-      setIsOutForDelivery(e.target.checked);
+    if (isOutForDelivery) {
+      setIsDelivered(e.target.checked);
     }
   };
   
@@ -33,9 +35,13 @@ const SellerPetOrder = (props) => {
       } 
  
   };
+  const handleInputChange = (e) =>{
+    setopt(e.target.value);
+  }
+  
   return (
     <div className="ManagePet-Card">
-    <h2>Pet</h2>
+    <h2>Pet Accessory</h2>
   <div className="ManagePet-Content">
     <div className="ManagePet-Field">
       <span>Order id:</span> {props.oderid}
@@ -50,47 +56,67 @@ const SellerPetOrder = (props) => {
       <span>Customer Ph.no:</span> {props.customerphno}
     </div>
     <div className="ManagePet-Field">
-      <span> Breed:</span> {props.Breed}
+      <span>Accessory Type:</span> {props.productType}
     </div>
     <div className="ManagePet-Field">
-    <span><div>Image:</div></span> <img src={props.pImage} alt="Pet-picture" />
+      <span>Product Name:</span> {props.pName}
     </div>
     <div className="ManagePet-Field">
-      <span>Gender:</span> {props.gender}
+      <span>Company Name:</span> {props.pName}
+    </div>
+    <div className="ManagePet-Field">
+    <span><div>Image:</div></span> <img src={props.pImage} alt="Acce-picture" />
     </div>
     <div className="ManagePet-Field">
       <span>Quantity:</span> {props.Quantity}
     </div>
+
     <div className="ManagePet-Field">
       <span>Mode of Payment:</span> {props.payment}
     </div>
 
-
     <div className="ManagePet-Field">
       <span>Price:</span> {props.Price}
     </div>
-
     <div className="Checkboxes">
-          <div>
-            <span>Packed:</span>{' '}
-            <input
-              type="checkbox"
-              id="firstCheckbox"
-              checked={isPacked}
-              onChange={handlePackedChange}
-            />
-          </div>
           <div>
             <span>Out for delivery:</span>{' '}
             <input
               type="checkbox"
-              id="secondCheckbox"
+              id="firstCheckbox"
               checked={isOutForDelivery}
-              onChange={handleOutForDeliveryChange}
-              disabled={!isPacked}
+              onChange={handleOutForDelivery}
             />
           </div>
+          <div>
+            <span>Delivered:</span>{' '}
+            <input
+              type="checkbox"
+              id="secondCheckbox"
+              checked={isDelivered}
+              onChange={handleDelivered}
+              disabled={!isOutForDelivery}
+            />
+          </div>
+
+          {isDelivered ?
+           <>
+             <div className="ManagePet-Field">
+              <span>OTP :</span>{' '}
+              <input
+                type="number"
+                className="ManagePet-Input"
+                name="otp"
+                id="otp"
+                value={otp}
+                onChange={handleInputChange}
+                />
+            </div>
+          </> : <>
+          
+          </>}
         </div>
+
   </div>
   <div className="ManagePet-Actions">
       <button className="Accept" onClick={handleSubmit}>
@@ -101,4 +127,4 @@ const SellerPetOrder = (props) => {
   )
 }
 
-export default SellerPetOrder
+export default SellerAcceOrder

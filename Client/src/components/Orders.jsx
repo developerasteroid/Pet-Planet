@@ -1,11 +1,10 @@
 import React from "react";
 import { Footer, Navbar } from "../components";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Orders = () => {
 
   const Ordereditems = () => {
-   
     return (
       <>
         <section className="h-100 gradient-custom">
@@ -17,60 +16,53 @@ const Orders = () => {
                     <h5 className="mb-0">Item List</h5>
                   </div>
                   <div className="card-body">
-                        <div>
-                          <div className="row d-flex align-items-center">
-                            <div className="col-lg-3 col-md-12">
-                              <div
-                                className="bg-image rounded"
-                                data-mdb-ripple-color="light"
-                              >
-                                <img
-                                  src="123"
-                                  // {props.Photo}
-                                  className="w-100"
-                                  alt="product pic"
-                                  width={100}
-                                  height={75}
-                                />
-                              </div>
-                            </div>
-
-                            <div className="col-lg-5 col-md-6">
-                              <p>
-                                <strong>
-                                  {/* {item.Name} */}
-                                  Name
-                                  </strong>
-                              </p>
-                              {/* <p>Color: blue</p>
-                              <p>Size: M</p> */}
-                            </div>
-                              <p className="text-start text-md-center">
-                                <strong>
-                                  {/* <span className="text-muted">{item.qty}</span>{" "} */}
-                                  <span className="text-muted">
-                                    {/* {Quantity} */}
-                                    Quantity
-                                    </span>{" "}
-                                  x Rs 
-                                  {/* {item.price} */}
-                                  100
-                                </strong>
-                              </p>
-                            </div>
+                    <div>
+                      <div className="row d-flex align-items-center">
+                        <div className="col-lg-3 col-md-12 text-center">
+                          <div
+                            className="bg-image rounded"
+                            data-mdb-ripple-color="light"
+                          >
+                            <img
+                              src="http://localhost:3030/image/product/IMG-26f0ea43af8b4d34a470672261cd76db.jpg"
+                              className="w-100"
+                              alt="product pic"
+                              style={{ maxWidth: "100px", maxHeight: "75px" }}
+                            />
                           </div>
-                          <hr className="my-4" />
                         </div>
+
+                        <div className="col-lg-5 col-md-6 text-center text-lg-start">
+                          <p>
+                            <strong>Name</strong>
+                            <br />
+                            <span className="text-muted">Quantity: 2</span> {/* Adjust Quantity here */}
+                          </p>
+                        </div>
+                        <div className="col-lg-4 col-md-6 text-center text-lg-end">
+                          <p className="text-end text-md-center">
+                            <strong>
+                              Total Price: Rs 200 {/* Adjust Total Price here */}
+                            </strong>
+                          </p>
+                          <p className="text-end text-md-center">
+                            <strong>
+                              Delivery Status
+                            </strong>
+                          </p>
+                        </div>
+                      </div>
+                      <hr className="my-4" />
+                    </div>
                   </div>
                 </div>
               </div>
-             
             </div>
-       </section>
+          </div>
+        </section>
       </>
     );
   };
-
 
   return (
     <>
@@ -85,5 +77,4 @@ const Orders = () => {
   );
 };
 
-
-export default Orders
+export default Orders;
