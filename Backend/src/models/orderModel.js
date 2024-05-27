@@ -6,6 +6,14 @@ const orderSchema = new mongoose.Schema({
         ref:'User',
         required:true
     },
+    customerName:{
+        type:String,
+        required:true
+    },
+    customerNumber:{
+        type:String,
+        required:true
+    },
     product:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Product',
@@ -15,6 +23,31 @@ const orderSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'Seller',
         required:true
+    },
+    productTitle:{
+        type:String,
+        required:true
+    },
+    productCategory:{
+        type:String,
+        enum:['pet', 'food', 'accessory'],
+        required:true
+    },
+    photo:{
+        type:String,
+        required:true
+    },
+    gender:{
+        type:String,
+        default:null
+    },
+    productType:{
+        type:String,
+        required:true
+    },
+    companyName:{
+        type:String,
+        default:null
     },
     quantity:{
         type:Number,

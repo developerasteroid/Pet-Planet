@@ -4,6 +4,7 @@ const authUserMiddleWare = require('../middlewares/authUserMiddleWare');
 const router = express();
 
 
+router.get('/authenticate', authUserMiddleWare, (req, res) => res.send({success: true}));
 
 
 router.get('/get/products', getProducts);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import { useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
@@ -18,6 +18,15 @@ const Product = () => {
   const [loading2, setLoading2] = useState(false);
   const Location = useLocation();
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+
+  // useEffect(()=>{
+  //   if(!localStorage.getItem('userToken')){
+  //     navigate(`/login`,{ state: { data: `/product/${id}` } });
+  //   }
+  // }, []);
   
 
   const addProduct = (product) => {
