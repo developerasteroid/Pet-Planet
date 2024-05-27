@@ -61,7 +61,7 @@ const Navbar = () => {
                         {
                             isLoggedIn ? 
                             <NavLink className="btn btn-outline-dark m-2" onClick={logoutUser}
-                            ><i className="fa fa-sign-in-alt mr-1"></i>Logout</NavLink> : 
+                            ><i className="fa fa-sign-out-alt mr-1"></i>Logout</NavLink> : 
                         (
                             <>
                                 <NavLink to="/login" className="btn btn-outline-dark m-2"><i className="fa fa-sign-in-alt mr-1"></i> Login</NavLink>

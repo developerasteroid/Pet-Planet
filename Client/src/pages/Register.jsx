@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Footer, Navbar } from "../components";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/css1.css';
+import { toast } from 'react-toastify';
+import axiosInstance from '../helper/axiosInstance';
 
 const Register = () => {
     const [formdata, setformdata] = useState({
@@ -15,6 +17,9 @@ const Register = () => {
     });
 
     const [OtpState, setOtpState] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +33,62 @@ const Register = () => {
       };
       const handleOnclickRegister = async(e)=>{
         e.preventDefault();
-        setOtpState(true);
+        setIsSubmitted(true);
+        if(!OtpState){
+            try {
+                const response = await axiosInstance.post('api/auth/user/sendotp', {email: formdata.email})
+                if(response.status == 200){
+                    toast.info("OTP sent to you email");
+                    setOtpState(true);
+                }
+            } catch(error){
+                if(error.response && error.response.data && error.response.data.message){
+                    toast.error(error.response.data.message);
+                } else {
+                    toast.error(error.message)
+                }
+            }
+        } else {
+            console.log(formdata);
+            const formDataToSend = new FormData();
+            formDataToSend.append('fullName', formdata.fullName);
+            formDataToSend.append('email', formdata.email);
+            formDataToSend.append('dateOfBirth', formdata.dob);
+            formDataToSend.append('mobileNumber', formdata.phno);
+            formDataToSend.append('password', formdata.password);
+            formDataToSend.append('acceptTerms', formdata.acceptterms);
+            formDataToSend.append('otp', formdata.otp);
+
+            try {
+                const response = await axiosInstance.post('api/auth/user/register', formDataToSend);
+                if(response.status == 200){
+                    try {
+                        const response = await axiosInstance.post('api/auth/user/login', {
+                            email: formdata.email, 
+                            password: formdata.password
+                        });
+                        if(response.status == 200 && response.data.token){
+                            localStorage.setItem('userToken', response.data.token);
+                            toast.success('Registered Successfully');
+                            navigate('/');
+                        }
+                      } catch(error) {
+                        if(error.response && error.response.data && error.response.data.message){
+                          toast.error(error.response.data.message);
+                        } else {
+                          toast.error(error.message);
+                        }
+                      }
+                }
+            } catch(error){
+                if(error.response && error.response.data && error.response.data.message){
+                    toast.error(error.response.data.message);
+                } else {
+                    toast.error(error.message)
+                }
+            }
+        }
+        setIsSubmitted(false);
       }
 
     return (
@@ -88,24 +148,9 @@ const Register = () => {
                                     className="form-control"
                                     id="phno"
                                     placeholder='Enter your phone number'
-                                    style={{
-                                        MozAppearance: 'textfield',
-                                        WebkitAppearance: 'none',
-                                    }}
                                     required
                                 />
-                                <style>
-                                    {`
-                                        input[type=number]::-webkit-inner-spin-button,
-                                        input[type=number]::-webkit-outer-spin-button {
-                                            -webkit-appearance: none;
-                                            margin: 0;
-                                        }
-                                        input[type=number] {
-                                            -moz-appearance: textfield;
-                                        }
-                                    `}
-                                </style>
+                                
                             </div>
                             <div className="form my-3">
                                 <label htmlFor="Password">Password</label>
@@ -160,7 +205,7 @@ const Register = () => {
                                 <button 
                                 className="my-2 mx-auto btn btn-dark" 
                                 type="submit" 
-                                
+                                disabled={isSubmitted}
                                 >
                                     Register
                                 </button>
