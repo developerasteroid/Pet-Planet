@@ -135,6 +135,10 @@ const Cart = () => {
                             <div className="col-lg-5 col-md-6">
                               <p>
                                 <strong>{item.product.name}</strong>
+                                {
+                                  item.product.quantity <= 0 &&
+                                <span className="text-danger"><br />Out of Stock</span>
+                                }
                               </p>
                               {/* <p>Color: blue</p>
                               <p>Size: M</p> */}

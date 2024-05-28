@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems, orderProduct } = require('../controllers/userController');
+const { getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems, orderProduct, getOrderedProduct } = require('../controllers/userController');
 const authUserMiddleWare = require('../middlewares/authUserMiddleWare');
 const router = express();
 
@@ -14,6 +14,7 @@ router.post('/cart/item/add', authUserMiddleWare, addItemToCart);
 router.post('/cart/item/remove', authUserMiddleWare, removeItemFromCart);
 router.get('/cart', authUserMiddleWare, getCartItems);
 router.post('/order/item', authUserMiddleWare, orderProduct);
+router.get('/get/ordered/product', authUserMiddleWare, getOrderedProduct);
 
 
 module.exports = router;

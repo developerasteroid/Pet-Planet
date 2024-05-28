@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Footer, Navbar } from "../components";
 import { toast } from "react-toastify";
 import axiosInstance from "../helper/axiosInstance";
+import { logout } from "../helper/functions";
+import { useDispatch } from "react-redux";
+import { fetchData } from "../redux/action";
 
 
 export default function Checkout () {
@@ -23,6 +26,7 @@ export default function Checkout () {
     
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     
     
@@ -87,7 +91,8 @@ export default function Checkout () {
     e.preventDefault();
     setIsLoading(true);
 
-    const errors = "";
+    const orderedProduct = [];
+    let successCount = 0;
 
     for(let item of cart){
       let data = {
@@ -98,9 +103,48 @@ export default function Checkout () {
         mobileNumber: formdata.phno,
         address: `${formdata.address}, ${formdata.state}, ${formdata.country}, ${formdata.zip}`
       }
-      console.log(item);
+      try {
+        const response = await axiosInstance.post('api/user/order/item', data);
+        if(response.status == 200){
+          successCount += 1;
+          orderedProduct.push({
+            productId: item.product._id,
+            quantity: item.quantity
+          })
+        }
+      } catch (error) {
+        if(error.response && error.response.status == 401){
+          logout();
+          navigate('/login');
+        } else if(error.response && error.response.data && error.response.data.message){
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.message);
+        }
+      }
     }
 
+    for(let item of orderedProduct){
+      try {
+        const response = await axiosInstance.post('api/user/cart/item/remove', item);
+      } catch (error) {
+        if(error.response && error.response.status == 401){
+          logout();
+          navigate('/login');
+        } else if(error.response && error.response.data && error.response.data.message){
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.message);
+        }
+      }
+    }
+
+    if(successCount > 0){
+      toast.success(`${successCount} Product${successCount > 1 ? 's' : ''} ordered Successfully`);
+      dispatch(fetchData());
+      navigate('/orders');
+    }
+    
     
 
 

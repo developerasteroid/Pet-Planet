@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Footer, Navbar } from "../components";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axiosInstance from "../helper/axiosInstance";
 
 const Orders = () => {
+  const [data, setData] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  const navigate = useNavigate();
+
+
+  useEffect(()=>{
+    (async()=>{
+      try {
+        const response = await axiosInstance.get('api/user/get/ordered/product');
+        if(response.status==200 && response.data){
+          setData(response.data);
+          setIsDataLoaded(true);
+        }
+      } catch(error){
+        if(error.response && error.response.status == 401){
+            navigate('/login');
+        } else if(error.response && error.response.data && error.response.data.message){
+            toast.error(error.response.data.message);
+        } else {
+            toast.error(error.message);
+        }
+      }
+    })();
+  },[])
 
   const Ordereditems = () => {
     return (
@@ -15,6 +43,9 @@ const Orders = () => {
                   <div className="card-header py-3">
                     <h5 className="mb-0">Item List</h5>
                   </div>
+                  {
+                    data.map((item)=>(
+
                   <div className="card-body">
                     <div>
                       <div className="row d-flex align-items-center">
@@ -24,7 +55,7 @@ const Orders = () => {
                             data-mdb-ripple-color="light"
                           >
                             <img
-                              src="http://localhost:3030/image/product/IMG-26f0ea43af8b4d34a470672261cd76db.jpg"
+                              src={item.photo}
                               className="w-100"
                               alt="product pic"
                               style={{ maxWidth: "100px", maxHeight: "75px" }}
@@ -34,27 +65,29 @@ const Orders = () => {
 
                         <div className="col-lg-5 col-md-6 text-center text-lg-start">
                           <p>
-                            <strong>Name</strong>
+                            <strong>{item.productTitle}</strong>
                             <br />
-                            <span className="text-muted">Quantity: 2</span> {/* Adjust Quantity here */}
+                            <span className="text-muted">Quantity: {item.quantity}</span> {/* Adjust Quantity here */}
                           </p>
                         </div>
                         <div className="col-lg-4 col-md-6 text-center text-lg-end">
                           <p className="text-end text-md-center">
                             <strong>
-                              Total Price: Rs 200 {/* Adjust Total Price here */}
+                              Total Price: Rs {item.totalAmount} {/* Adjust Total Price here */}
                             </strong>
                           </p>
                           <p className="text-end text-md-center">
-                            <strong>
-                              Delivery Status
-                            </strong>
+                            <span>
+                              Status: {item.status}
+                            </span>
                           </p>
                         </div>
                       </div>
                       <hr className="my-4" />
                     </div>
                   </div>
+                    ))
+                  }
                 </div>
               </div>
             </div>
@@ -63,6 +96,21 @@ const Orders = () => {
       </>
     );
   };
+
+
+  if(!isDataLoaded){
+    return (
+      <>
+      <Navbar />
+        <div className="d-flex justify-content-center align-items-center" style={{height: 400}}>
+          <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      <Footer />
+      </>
+    )
+  }
 
   return (
     <>

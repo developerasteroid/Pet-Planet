@@ -324,6 +324,8 @@ const orderProduct = async(req, res) => {
         const order = new Order({user: userId, customerName, customerNumber:mobileNumber, customerEmail: email, product: productId, seller: product.seller, productTitle: product.name, productCategory:product.category, photo:product.photo, gender, productType, companyName, quantity, weight: product.weight, totalAmount, paymentMode:"cash on delivery", address});
         await order.save();
 
+        await Product.findByIdAndUpdate(productId, {$inc:{quantity:(quantity * -1)}});
+
         res.status(200).json({message:"product ordered successfully"});
 
     } catch (error){
@@ -332,7 +334,28 @@ const orderProduct = async(req, res) => {
     }
 }
 
+const getOrderedProduct = async(req, res) => {
+    try {
+        const userId = req.params._id
+        
+        const orders = await Order.find({user: userId}).sort({ orderDate: -1 });
+
+        const data = orders.map(item => {
+            return {
+                ...item.toObject(),  // Ensure you convert the Mongoose document to a plain object
+                photo: `${process.env.HOST}/image/product/${item.photo}`
+            };
+        });
+
+        res.json(data);
+
+    } catch (error) {
+        console.error('Error in getOrderedProduct:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
 
 
 
-module.exports = {getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems, orderProduct};
+
+module.exports = {getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems, orderProduct, getOrderedProduct};
