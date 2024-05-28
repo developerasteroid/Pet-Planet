@@ -638,4 +638,28 @@ const sendOtpForOrderDeliver = async(req, res) => {
     }
 }
 
-module.exports = {uploadProductImage, uploadErrorHandler, addPet, addFood, addAccessory,getMyProducts, updateProduct, deleteProduct, getOrderRequest, acceptOrderRequest, cancelOrderRequest, getActiveOrder, sendOtpForOrderDeliver, upgradeOrder}
+
+const getSoldHistory = async(req, res) => {
+    try {
+        const seller = req.params._id;
+
+        const orders = await Order.find({seller, status: 'delivered'}).sort({orderDate: -1});
+
+        const data = orders.map(item => {
+            return {
+                ...item.toObject(),
+                otp: null,
+                photo: `${process.env.HOST}/image/product/${item.photo}`
+            };
+        });
+
+
+        res.json(data);
+
+    } catch(error) {
+        console.error('Error in getSoldHistory:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+module.exports = {uploadProductImage, uploadErrorHandler, addPet, addFood, addAccessory,getMyProducts, updateProduct, deleteProduct, getOrderRequest, acceptOrderRequest, cancelOrderRequest, getActiveOrder, sendOtpForOrderDeliver, upgradeOrder, getSoldHistory}
