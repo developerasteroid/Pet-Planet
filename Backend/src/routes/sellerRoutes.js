@@ -1,6 +1,6 @@
 const express = require('express');
 const authSellerMiddleWare = require('../middlewares/authSellerMiddleWare');
-const { addPet, uploadProductImage, addFood, uploadErrorHandler, getMyProducts, updateProduct, deleteProduct, addAccessory, getOrderRequest, acceptOrderRequest, cancelOrderRequest } = require('../controllers/sellerController');
+const { addPet, uploadProductImage, addFood, uploadErrorHandler, getMyProducts, updateProduct, deleteProduct, addAccessory, getOrderRequest, acceptOrderRequest, cancelOrderRequest, getActiveOrder, sendOtpForOrderDeliver, upgradeOrder } = require('../controllers/sellerController');
 const router = express();
 
 router.get('/authenticate', authSellerMiddleWare, (req, res) => res.send({success: true}));
@@ -23,6 +23,12 @@ router.post('/delete/product', authSellerMiddleWare, deleteProduct);
 router.get('/get/order/request', authSellerMiddleWare, getOrderRequest);
 router.post('/order/accept', authSellerMiddleWare, acceptOrderRequest);
 router.post('/order/cancel', authSellerMiddleWare, cancelOrderRequest);
+
+router.get('/get/order/active', authSellerMiddleWare, getActiveOrder);
+
+router.post('/order/send/otp', authSellerMiddleWare, sendOtpForOrderDeliver);
+router.post('/order/upgrade', authSellerMiddleWare, upgradeOrder);
+
 
 
 

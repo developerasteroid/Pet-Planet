@@ -9,6 +9,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs').promises;
 const mongoose = require('mongoose');
+const { SendMail } = require('./authController');
+
 
 // Function to check if the file type is an image
 const isImage = function (file) {
@@ -448,6 +450,10 @@ const acceptOrderRequest = async(req, res) => {
             return res.status(403).json({ message: 'Cannot accept. This Order does not belongs to you' });
         }
 
+        if(order.status != 'pending'){
+            return res.status(403).json({ message: `Cannot Perform this action, Order already in ${order.status} status` });
+        }
+
         await Order.findByIdAndUpdate(orderId, {status: 'processing'});
 
         return res.status(200).json({message:'Order accepted Successfully'});
@@ -482,6 +488,10 @@ const cancelOrderRequest = async(req, res) => {
             return res.status(403).json({ message: 'Cannot decline. This Order does not belongs to you' });
         }
 
+        if(order.status == 'delivered'){
+            return res.status(403).json({ message: 'Cannot cancel already delivered Order' });
+        }
+
         await Order.findByIdAndUpdate(orderId, {status: 'cancelled'});
 
         await Product.findByIdAndUpdate(order.product, {$inc:{quantity: order.quantity}});
@@ -494,4 +504,138 @@ const cancelOrderRequest = async(req, res) => {
     }
 }
 
-module.exports = {uploadProductImage, uploadErrorHandler, addPet, addFood, addAccessory,getMyProducts, updateProduct, deleteProduct, getOrderRequest, acceptOrderRequest, cancelOrderRequest}
+
+const getActiveOrder = async(req, res) => {
+    try {
+        const seller = req.params._id;
+
+        const orders = await Order.find({seller, status: {$in : ['processing', 'out for delivery']}}).sort({ orderDate: 1 });
+
+        const data = orders.map(item => {
+            return {
+                ...item.toObject(),
+                otp: item.otp != null,
+                photo: `${process.env.HOST}/image/product/${item.photo}`
+            };
+        });
+
+        res.json(data);
+
+    } catch (error) {
+        console.error('Error in getActiveOrder:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+const upgradeOrder = async(req, res) => {
+    try {
+        const seller = req.params._id;
+        const {orderId, otp} = req.body;
+        
+        if(!orderId){
+            return res.status(400).json({ message: 'order id is missing' });
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(orderId)){
+            return res.status(400).json({ message: 'Invalid order Id' });
+        }
+
+        const order = await Order.findById(orderId);
+
+        if(!order){
+            return res.status(404).json({ message: 'order does not exist' });
+        }
+
+        if(order.seller.toString() != seller.toString()){
+            return res.status(403).json({ message: 'Cannot accept. This Order does not belongs to you' });
+        }
+
+        if(order.status == 'pending'){
+            return res.status(403).json({ message: `Cannot Perform this action, Order still in pending. Accept order before upgrading` });
+        }
+
+        if(order.status == 'cancelled'){
+            return res.status(403).json({ message: `Cannot Perform this action, Order is already cancelled` });
+
+        }
+        if(order.status == 'delivered'){
+            return res.status(403).json({ message: `Cannot Perform this action, Order is already delivered` });
+        }
+        if(order.status == 'out for delivery'){
+            if(!otp){
+                return res.status(400).json({ message: `otp is required` });
+            }
+            if(order.otp != otp){
+                return res.status(400).json({ message: `Incorrect otp` });
+            }
+
+            await Order.findByIdAndUpdate(orderId, {status: 'delivered'});
+            return res.status(200).json({message:'Order status updated Successfully'});
+
+        }
+
+
+        await Order.findByIdAndUpdate(orderId, {status: 'out for delivery'});
+
+        return res.status(200).json({message:'Order status updated Successfully'});
+
+    } catch (error) {
+        console.error('Error in upgradeOrder:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+const sendOtpForOrderDeliver = async(req, res) => {
+    try {
+        const seller = req.params._id;
+        const {orderId} = req.body;
+        const otpNumber = Math.floor(100000 + Math.random() * 900000); // Generate a random 6-digit number
+
+        const otp = `${otpNumber}`;
+
+        const order = await Order.findById(orderId);
+
+        if(!order){
+            return res.status(404).json({ message: 'order does not exist' });
+        }
+
+        if(order.seller.toString() != seller.toString()){
+            return res.status(403).json({ message: 'Cannot accept. This Order does not belongs to you' });
+        }
+
+        if(order.status != 'out for delivery'){
+            return res.status(403).json({ message: `Cannot send otp. The Status of order should be out for delivery but it was ${order.status}` });
+        }
+        
+
+
+        const to = order.customerEmail;
+        const subject = `Your Order Code - ${otp}`;
+        const html = `
+        <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
+        <h2>Pet Planet</h2>
+        <h4>code for order delivery</h4>
+        <h4>Order id: ${orderId}</h4>
+        <hr/>
+        <p>Code for Product: <br> ${order.productTitle}</p>
+        <h1>${otp}</h1>
+        <p>Dont Disclose this code with anyone. <br> Provide this code to seller once you recive your order</p>
+        </div>
+        `;
+        SendMail(process.env.EMAIL, to, subject, html)
+        .then(async(result) => {
+            await Order.findByIdAndUpdate(orderId, {otp})
+            res.status(200).json({message: 'OTP sent to User Email Successfully'});
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(400).json({message: 'Failed to send OTP'});
+        });
+    } catch(error) {
+        console.error('Error in sendOtpForOrderDeliver:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+module.exports = {uploadProductImage, uploadErrorHandler, addPet, addFood, addAccessory,getMyProducts, updateProduct, deleteProduct, getOrderRequest, acceptOrderRequest, cancelOrderRequest, getActiveOrder, sendOtpForOrderDeliver, upgradeOrder}

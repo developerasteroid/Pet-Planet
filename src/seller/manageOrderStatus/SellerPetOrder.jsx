@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 
 const SellerPetOrder = (props) => {
 
-  const [isOutForDelivery, setIsOutForDelivery] = useState(false);
+  const [isOutForDelivery, setIsOutForDelivery] = useState(props.status == 'out for delivery');
   const [isDelivered, setIsDelivered] = useState(false);
   const [otp, setopt]= useState('');
+  const [otpErrorMessage, setOtpErrorMessage] = useState('');
+  const [otpSending, setOtpSending] = useState(false);
 
   const handleOutForDelivery = (e) => {
     setIsOutForDelivery(e.target.checked);
@@ -28,14 +30,32 @@ const SellerPetOrder = (props) => {
       const isConfirmed = window.confirm('Are you sure you want make changes in the status of order');
 
       if (isConfirmed) {
-        console.log('Changes Submitted');
-      } else {
-        console.log('Changes declined');
-      } 
+        if(props.status != 'out for delivery' && isOutForDelivery){
+          props.upgradeAction(props.oderid);
+        } else if(props.status == 'out for delivery' && isDelivered && otp){
+          props.upgradeAction(props.oderid, otp);
+          setIsDelivered(false);
+        } else if(props.status == 'out for delivery' && isDelivered && !otp){
+          setOtpErrorMessage('OTP is required.');
+        }
+      }
  
   };
   const handleInputChange = (e) =>{
     setopt(e.target.value);
+    if(e.target.value){
+      setOtpErrorMessage('');
+    }
+  }
+
+  const handleSendOtp = async() => {
+    setOtpSending(true);
+    const result = await props.sendOtp(props.oderid);
+    if(result){
+      setTimeout(()=>{setOtpSending(false)}, 60000)
+    } else {
+      setOtpSending(false);
+    }
   }
   return (
 
@@ -55,6 +75,9 @@ const SellerPetOrder = (props) => {
       <span>Customer Ph.no:</span> {props.customerphno}
     </div>
     <div className="ManagePet-Field">
+      <span>Customer Ph.no:</span> {props.customerEmail}
+    </div>
+    <div className="ManagePet-Field">
       <span> Breed:</span> {props.Breed}
     </div>
     <div className="ManagePet-Field">
@@ -72,7 +95,7 @@ const SellerPetOrder = (props) => {
 
 
     <div className="ManagePet-Field">
-      <span>Price:</span> {props.Price}
+      <span>Total Price:</span> {props.Price}/-
     </div>
 
     <div className="Checkboxes">
@@ -83,8 +106,10 @@ const SellerPetOrder = (props) => {
               id="firstCheckbox"
               checked={isOutForDelivery}
               onChange={handleOutForDelivery}
+              disabled={props.status == 'out for delivery'}
             />
           </div>
+          { props.status == 'out for delivery' && 
           <div>
             <span>Delivered:</span>{' '}
             <input
@@ -95,6 +120,7 @@ const SellerPetOrder = (props) => {
               disabled={!isOutForDelivery}
             />
           </div>
+          }
 
           {isDelivered ?
            <>
@@ -109,12 +135,19 @@ const SellerPetOrder = (props) => {
                 onChange={handleInputChange}
                 />
             </div>
+            {otpErrorMessage && <span style={{color:'#f00', fontSize:14}}>{otpErrorMessage}</span>}
           </> : <>
           
           </>}
         </div>
   </div>
   <div className="ManagePet-Actions">
+    {
+      props.status == 'out for delivery' &&
+      <button className="Accept" onClick={handleSendOtp} disabled={otpSending}>
+        Send OTP
+      </button>
+    }
       <button className="Accept" onClick={handleSubmit}>
         Submit
       </button>
