@@ -5,6 +5,8 @@ const SellerFoodOrder = (props) => {
   const [isOutForDelivery, setIsOutForDelivery] = useState(false);
   const [isDelivered, setIsDelivered] = useState(false);
   const [otp, setopt]= useState('');
+  const [otpErrorMessage, setOtpErrorMessage] = useState('');
+  const [otpSending, setOtpSending] = useState(false);
 
   const handleOutForDelivery = (e) => {
     setIsOutForDelivery(e.target.checked);
@@ -28,14 +30,31 @@ const SellerFoodOrder = (props) => {
       const isConfirmed = window.confirm('Are you sure you want make changes in the status of order');
 
       if (isConfirmed) {
-        console.log('Changes Submitted');
-      } else {
-        console.log('Changes declined');
-      } 
+        if(props.status != 'out for delivery' && isOutForDelivery){
+          props.upgradeAction(props.orderid);
+        } else if(props.status == 'out for delivery' && isDelivered && otp){
+          props.upgradeAction(props.orderid, otp);
+          setIsDelivered(false);
+        } else if(props.status == 'out for delivery' && isDelivered && !otp){
+          setOtpErrorMessage('OTP is required.');
+        }
+      }
  
   };
   const handleInputChange = (e) =>{
     setopt(e.target.value);
+    if(e.target.value){
+      setOtpErrorMessage('');
+    }
+  }
+  const handleSendOtp = async() => {
+    setOtpSending(true);
+    const result = await props.sendOtp(props.orderid);
+    if(result){
+      setTimeout(()=>{setOtpSending(false)}, 60000)
+    } else {
+      setOtpSending(false);
+    }
   }
 
 
@@ -44,7 +63,7 @@ const SellerFoodOrder = (props) => {
           <h2>Pet Food</h2>
           <div className="ManagePet-Content">
             <div className="ManagePet-Field">
-              <span>Order id:</span> {props.oderid}
+              <span>Order id:</span> {props.orderid}
             </div>
             <div className="ManagePet-Field">
               <span>Customer Name:</span> {props.customerName}
@@ -53,13 +72,16 @@ const SellerFoodOrder = (props) => {
               <span>Customer Address:</span> {props.customerAddress}
             </div>
             <div className="ManagePet-Field">
+            <span>Customer Email:</span> {props.customerEmail}
+          </div>
+            <div className="ManagePet-Field">
             <span>Customer Ph.no:</span> {props.customerphno}
           </div>
             <div className="ManagePet-Field">
               <span>Product Type:</span> {props.productType}
             </div>
             <div className="ManagePet-Field">
-              <span>Company Name:</span> {props.category}
+              <span>Company Name:</span> {props.companyName}
             </div>
             <div className="ManagePet-Field">
             <span><div>Image:</div></span> <img src={props.pImage} alt="food-picture" />
@@ -86,8 +108,10 @@ const SellerFoodOrder = (props) => {
               id="firstCheckbox"
               checked={isOutForDelivery}
               onChange={handleOutForDelivery}
+              disabled={props.status == 'out for delivery'}
             />
           </div>
+          { props.status == 'out for delivery' && 
           <div>
             <span>Delivered:</span>{' '}
             <input
@@ -98,6 +122,7 @@ const SellerFoodOrder = (props) => {
               disabled={!isOutForDelivery}
             />
           </div>
+          }
 
           {isDelivered ?
            <>
@@ -112,18 +137,24 @@ const SellerFoodOrder = (props) => {
                 onChange={handleInputChange}
                 />
             </div>
+            {otpErrorMessage && <span style={{color:'#f00', fontSize:14}}>{otpErrorMessage}</span>}
           </> : <>
           
           </>}
         </div>
-
         </div>
-        <div className="ManagePet-Actions">
-            <button className="Accept" onClick={handleSubmit}>
-              Accept
-            </button>
+          <div className="ManagePet-Actions">
+            {
+              props.status == 'out for delivery' &&
+              <button className="Accept" onClick={handleSendOtp} disabled={otpSending}>
+                Send OTP
+              </button>
+            }
+              <button className="Accept" onClick={handleSubmit}>
+                Submit
+              </button>
+          </div>
         </div>
-      </div>
   )
 }
 

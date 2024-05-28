@@ -8,7 +8,7 @@ const SellerFoodOrderRequestManage = (props) => {
     const isConfirmed = window.confirm('Are you sure you want Accept the order');
 
     if (isConfirmed) {
-      props.accept(props.oderid);
+      props.accept(props.orderid);
     } 
 
 };
@@ -17,7 +17,7 @@ const handleDecline = () => {
   const isConfirmed = window.confirm('Are you sure you want Decline the order request');
 
     if (isConfirmed) {
-      props.decline(props.oderid);
+      props.decline(props.orderid);
     }
 };
 
@@ -26,7 +26,7 @@ const handleDecline = () => {
       <h2>Pet Food</h2>
     <div className="ManagePet-Content">
       <div className="ManagePet-Field">
-        <span>Order id:</span> {props.oderid}
+        <span>Order id:</span> {props.orderid}
       </div>
       <div className="ManagePet-Field">
         <span>Product Name:</span> {props.pName}

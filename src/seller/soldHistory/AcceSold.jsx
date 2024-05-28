@@ -6,7 +6,7 @@ const AcceSold = (props) => {
     <h2>Pet Accessory</h2>
   <div className="ManagePet-Content">
     <div className="ManagePet-Field">
-      <span>Order id:</span> {props.oderid}
+      <span>Order id:</span> {props.orderid}
     </div>
     <div className="ManagePet-Field">
       <span>Accessory Type:</span> {props.productType}

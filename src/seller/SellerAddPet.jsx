@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddPet.css';
 import sellerAxiosInstance from '../helper/sellerAxios';
 import {useNavigate} from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 
 const SellerAddPet = () => {
@@ -539,5 +540,5 @@ const SellerAddPet = () => {
       </>
     );
   };
-  
-export default SellerAddPet;
+
+  export default SellerAddPet;
