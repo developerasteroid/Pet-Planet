@@ -70,6 +70,9 @@ const SellerAcceOrder = (props) => {
     <div className="ManagePet-Field">
       <span>Quantity:</span> {props.Quantity}
     </div>
+    <div className="ManagePet-Field">
+      <span>Weight:</span> {props.Weight}
+    </div>
 
     <div className="ManagePet-Field">
       <span>Mode of Payment:</span> {props.payment}
