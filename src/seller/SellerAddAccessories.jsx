@@ -3,6 +3,8 @@ import { ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/SellerAddAccessories.css';
 import sellerAxiosInstance from '../helper/sellerAxios'
+import Swal from 'sweetalert2'
+import qr from './assets/qr.jpg'
 
 const SellerAddAccessories = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -41,9 +43,33 @@ const SellerAddAccessories = () => {
         toast.error('Invalid Quantity Value');
         return;
       }
-      const isConfirmed = window.confirm('Are you sure you want sell this product');
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'Are you sure you want to sell this product?',
+        imageUrl: qr, // Use the imported image here
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Add Product!',
+        cancelButtonText: 'No, cancel!',
+        input: 'text',
+        inputLabel: 'Transaction ID',
+        inputPlaceholder: 'Enter Transaction ID',
+        inputValidator: (value) => {
+            if (!value) {
+                return 'You need to enter the Transaction ID!';
+            }
+        },
+        preConfirm: (value) => {
+            if (!value) {
+                Swal.showValidationMessage('Transaction ID is required');
+            }
+            return value;
+        }
+        });
 
-      if (isConfirmed) {
+      if (result.isConfirmed) {
         setIsSubmitted(true);
 
         try{

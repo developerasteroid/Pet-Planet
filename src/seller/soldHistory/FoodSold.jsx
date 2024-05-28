@@ -8,12 +8,15 @@ const FoodSold = (props) => {
       <div className="ManagePet-Field">
         <span>Order id:</span> {props.orderid}
       </div>
+      <div className="ManagePet-Field">
+      <span>Order date:</span> {props.orderDate}
+    </div>
       
       <div className="ManagePet-Field">
         <span>Product Type:</span> {props.productType}
       </div>
       <div className="ManagePet-Field">
-        <span>Company Name:</span> {props.category}
+        <span>Company Name:</span> {props.companyName}
       </div>
       <div className="ManagePet-Field">
       <span><div>Image:</div></span> <img src={props.pImage} alt="food-picture" />

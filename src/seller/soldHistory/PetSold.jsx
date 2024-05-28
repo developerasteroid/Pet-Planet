@@ -8,6 +8,9 @@ const PetSold = (props) => {
     <div className="ManagePet-Field">
       <span>Order id:</span> {props.orderid}
     </div>
+    <div className="ManagePet-Field">
+      <span>Order date:</span> {props.orderDate}
+    </div>
 
     <div className="ManagePet-Field">
       <span> Breed:</span> {props.Breed}

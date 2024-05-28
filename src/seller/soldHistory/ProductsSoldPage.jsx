@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import PetSold from './PetSold'
 import FoodSold from './FoodSold'
 import AcceSold from './AcceSold'
@@ -7,16 +7,16 @@ import sellerAxiosInstance from '../../helper/sellerAxios'
 
 const ProductsSoldPage = () => {
 
-  const [orders, setOrders] = useState([]);
+  const [soldorders, setSoldOrders] = useState([]);
 
   useEffect(()=>{
 
     (async()=>{
       try {
-        const response = await sellerAxiosInstance.get('api/seller/get/order/request');
+        const response = await sellerAxiosInstance.get('api/seller/get/order/sold');
         if(response.status == 200 && response.data){
-          // console.log(response.data);
-          setOrders(response.data);
+          console.log(response.data);
+          setSoldOrders(response.data);
         }
       } catch(error){
         if(error.response){
@@ -37,10 +37,55 @@ const ProductsSoldPage = () => {
   return (
   <>
   <h1>Sold History</h1>
-    <PetSold/>
-    <FoodSold/>
-    <AcceSold/>
-    
+  {
+    soldorders.map((order, index)=>{
+      if(order.productCategory == 'pet'){
+        return(
+          <PetSold
+          orderid={order._id}
+          orderDate={order.orderDate}
+          Breed={order.productType}
+          pImage={order.photo}
+          gender={order.gender}
+          Quantity={order.quantity}
+          payment={order.paymentMode}
+          Price={order.totalAmount}
+          />
+        )
+      }else if(order.productCategory=='food'){
+        return(
+          <FoodSold
+          orderid={order._id}
+          orderDate={order.orderDate}
+          productType={order.productType}
+          companyName={order.companyName}
+          pImage={order.photo}
+          gender={order.gender}
+          Quantity={order.quantity}
+          Weight={order.weight}
+          payment={order.paymentMode}
+          Price={order.totalAmount}
+          />
+        )
+      }else if(order.productCategory=='accessory'){
+        return(
+          <AcceSold
+          orderid={order._id}
+          orderDate={order.orderDate}
+          productType={order.productType}
+          pName={order.productTitle}
+          companyName={order.companyName}
+          pImage={order.photo}
+          Quantity={order.quantity}
+          Weight={order.weight}
+          payment={order.paymentMode}
+          Price={order.totalAmount}
+          />
+        )
+      }
+
+      })
+    }
   </>
   )
 }
