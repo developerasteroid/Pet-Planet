@@ -3,6 +3,7 @@ const Product = require('./../models/productModel');
 const Pet = require('./../models/petModel');
 const Food = require('./../models/foodModel');
 const Accessory = require('./../models/accessoryModel')
+const Order = require('./../models/orderModel');
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const path = require('path');
@@ -403,5 +404,94 @@ const deleteProduct = async(req, res) => {
 }
 
 
+const getOrderRequest = async(req, res) => {
+    try {
+        const seller = req.params._id;
 
-module.exports = {uploadProductImage, uploadErrorHandler, addPet, addFood, addAccessory,getMyProducts, updateProduct, deleteProduct}
+        const orders = await Order.find({seller, status: 'pending'}).sort({ orderDate: 1 });
+
+        const data = orders.map(item => {
+            return {
+                ...item.toObject(),
+                photo: `${process.env.HOST}/image/product/${item.photo}`
+            };
+        });
+
+        res.json(data);
+
+    } catch (error) {
+        console.error('Error in getOrderRequest:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+const acceptOrderRequest = async(req, res) => {
+    try {
+        const seller = req.params._id;
+        const {orderId} = req.body;
+        
+        if(!orderId){
+            return res.status(400).json({ message: 'order id is missing' });
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(orderId)){
+            return res.status(400).json({ message: 'Invalid order Id' });
+        }
+
+        const order = await Order.findById(orderId);
+
+        if(!order){
+            return res.status(404).json({ message: 'order does not exist' });
+        }
+
+        if(order.seller.toString() != seller.toString()){
+            return res.status(403).json({ message: 'Cannot accept. This Order does not belongs to you' });
+        }
+
+        await Order.findByIdAndUpdate(orderId, {status: 'processing'});
+
+        return res.status(200).json({message:'Order accepted Successfully'});
+
+    } catch (error) {
+        console.error('Error in acceptOrderRequest:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+const cancelOrderRequest = async(req, res) => {
+    try {
+        const seller = req.params._id;
+        const {orderId} = req.body;
+        
+        if(!orderId){
+            return res.status(400).json({ message: 'order id is missing' });
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(orderId)){
+            return res.status(400).json({ message: 'Invalid order Id' });
+        }
+
+        const order = await Order.findById(orderId);
+
+        if(!order){
+            return res.status(404).json({ message: 'order does not exist' });
+        }
+
+        if(order.seller.toString() != seller.toString()){
+            return res.status(403).json({ message: 'Cannot decline. This Order does not belongs to you' });
+        }
+
+        await Order.findByIdAndUpdate(orderId, {status: 'cancelled'});
+
+        await Product.findByIdAndUpdate(order.product, {$inc:{quantity: order.quantity}});
+
+        return res.status(200).json({message:'Order declined Successfully'});
+
+    } catch (error) {
+        console.error('Error in declineOrderRequest:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+module.exports = {uploadProductImage, uploadErrorHandler, addPet, addFood, addAccessory,getMyProducts, updateProduct, deleteProduct, getOrderRequest, acceptOrderRequest, cancelOrderRequest}

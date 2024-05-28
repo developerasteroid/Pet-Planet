@@ -4,23 +4,22 @@ import '../css/SellerManagePetComponent.css';
 
 const SellerAcceOrderRequestManage = (props) => {
 
-  const handleAccept = (e) => {
+  const handleAccept = () => {
+    const isConfirmed = window.confirm('Are you sure you want Accept the order');
 
-    e.preventDefault();
+    if (isConfirmed) {
+      props.accept(props.oderid);
+    } 
 
-      const isConfirmed = window.confirm('Are you sure you want Accept the order');
+};
 
-      if (isConfirmed) {
-        console.log('accepted');
-      } else {
-        console.log('declined');
-      } 
- 
-  };
+const handleDecline = () => {
+  const isConfirmed = window.confirm('Are you sure you want Decline the order request');
 
-  const handleDecline = (e) => {
-    console.log('Declined');
-  };
+    if (isConfirmed) {
+      props.decline(props.oderid);
+    }
+};
 
   return (
     <div className="ManagePet-Card">
@@ -30,7 +29,16 @@ const SellerAcceOrderRequestManage = (props) => {
         <span>Order id:</span> {props.oderid}
       </div>
       <div className="ManagePet-Field">
+        <span>Product Name:</span> {props.pName}
+      </div>
+      <div className="ManagePet-Field">
         <span>Customer Name:</span> {props.customerName}
+      </div>
+      <div className="ManagePet-Field">
+        <span>Customer Number:</span> {props.customerMobile}
+      </div>
+      <div className="ManagePet-Field">
+        <span>Customer Email:</span> {props.customerEmail}
       </div>
       <div className="ManagePet-Field">
         <span>Customer Address:</span> {props.customerAddress}
@@ -38,11 +46,9 @@ const SellerAcceOrderRequestManage = (props) => {
       <div className="ManagePet-Field">
         <span>Accessory Type:</span> {props.productType}
       </div>
+      
       <div className="ManagePet-Field">
-        <span>Product Name:</span> {props.pName}
-      </div>
-      <div className="ManagePet-Field">
-        <span>Company Name:</span> {props.pName}
+        <span>Company Name:</span> {props.companyName}
       </div>
       <div className="ManagePet-Field">
       <span><div>Image:</div></span> <img src={props.pImage} alt="Acce-picture" />
@@ -59,7 +65,7 @@ const SellerAcceOrderRequestManage = (props) => {
       </div>
 
       <div className="ManagePet-Field">
-        <span>Price:</span> {props.Price}
+        <span>Total Price:</span> {props.Price}/-
       </div>
 
     </div>
