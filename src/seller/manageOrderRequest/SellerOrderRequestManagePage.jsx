@@ -96,7 +96,7 @@ const SellerOrderRequestManagePage = () => {
           return (
                   <SellerPetOrderRequestManage 
                     key={index}
-                    oderid={order._id}
+                    orderid={order._id}
                     pName={order.productTitle}
                     customerName={order.customerName}
                     customerMobile={order.customerNumber}
@@ -116,7 +116,7 @@ const SellerOrderRequestManagePage = () => {
             return (
                     <SellerFoodOrderRequestManage 
                       key={index}
-                      oderid={order._id}
+                      orderid={order._id}
                       pName={order.productTitle}
                       customerName={order.customerName}
                       customerAddress={order.address}
@@ -137,7 +137,7 @@ const SellerOrderRequestManagePage = () => {
             return (
                     <SellerAcceOrderRequestManage 
                       key={index}
-                      oderid={order._id}
+                      orderid={order._id}
                       pName={order.productTitle}
                       customerName={order.customerName}
                       customerMobile={order.customerNumber}

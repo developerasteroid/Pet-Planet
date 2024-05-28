@@ -18,7 +18,7 @@ const ManageOrders = () => {
     try {
       const response = await sellerAxiosInstance.get('api/seller/get/order/active');
       if(response.status == 200 && response.data){
-        console.log(response.data);
+        // console.log("data is",response.data);
         setData(response.data);
       }
     } catch(error){
@@ -84,8 +84,6 @@ const ManageOrders = () => {
     }
   }
 
-
-
   return (
     <>
     <h1>Manage Orders</h1>
@@ -95,7 +93,7 @@ const ManageOrders = () => {
           return (
             <SellerPetOrder
               key={index}
-              oderid={item._id}
+              orderid={item._id}
               customerName={item.customerName}
               customerAddress={item.address}
               customerphno={item.customerNumber}
@@ -116,12 +114,43 @@ const ManageOrders = () => {
           return (
             <SellerFoodOrder
               key={index}
+              orderid={item._id}
+              customerName={item.customerName}
+              customerAddress={item.address}
+              customerEmail={item.customerEmail}
+              customerphno={item.customerNumber}
+              productType={item.productType}
+              companyName={item.companyName}
+              pImage={item.photo}
+              Quantity={item.quantity}
+              Weight={item.weight}
+              payment={item.paymentMode}
+              Price={item.totalAmount}
+              status={item.status}
+              sendOtp={sendOtpAction}
+              upgradeAction={upgradeAction}
             />
           )
         } else if(item.productCategory == 'accessory'){
           return (
             <SellerAcceOrder
               key={index}
+              orderid={item._id}
+              customerName={item.customerName}
+              customerAddress={item.address}
+              customerEmail={item.customerEmail}
+              customerphno={item.customerNumber}
+              productType={item.productType}
+              pName={item.title}
+              companyName={item.companyName}
+              pImage={item.photo}
+              Quantity={item.quantity}
+              Weight={item.weight}
+              payment={item.paymentMode}
+              Price={item.totalAmount}
+              status={item.status}
+              sendOtp={sendOtpAction}
+              upgradeAction={upgradeAction}
             />
           )
         } else {

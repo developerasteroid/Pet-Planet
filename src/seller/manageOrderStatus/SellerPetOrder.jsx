@@ -31,9 +31,9 @@ const SellerPetOrder = (props) => {
 
       if (isConfirmed) {
         if(props.status != 'out for delivery' && isOutForDelivery){
-          props.upgradeAction(props.oderid);
+          props.upgradeAction(props.orderid);
         } else if(props.status == 'out for delivery' && isDelivered && otp){
-          props.upgradeAction(props.oderid, otp);
+          props.upgradeAction(props.orderid, otp);
           setIsDelivered(false);
         } else if(props.status == 'out for delivery' && isDelivered && !otp){
           setOtpErrorMessage('OTP is required.');
@@ -50,7 +50,7 @@ const SellerPetOrder = (props) => {
 
   const handleSendOtp = async() => {
     setOtpSending(true);
-    const result = await props.sendOtp(props.oderid);
+    const result = await props.sendOtp(props.orderid);
     if(result){
       setTimeout(()=>{setOtpSending(false)}, 60000)
     } else {
@@ -63,7 +63,7 @@ const SellerPetOrder = (props) => {
     <h2>Pet</h2>
   <div className="ManagePet-Content">
     <div className="ManagePet-Field">
-      <span>Order id:</span> {props.oderid}
+      <span>Order id:</span> {props.orderid}
     </div>
     <div className="ManagePet-Field">
       <span>Customer Name:</span> {props.customerName}
@@ -75,7 +75,7 @@ const SellerPetOrder = (props) => {
       <span>Customer Ph.no:</span> {props.customerphno}
     </div>
     <div className="ManagePet-Field">
-      <span>Customer Ph.no:</span> {props.customerEmail}
+      <span>Customer email:</span> {props.customerEmail}
     </div>
     <div className="ManagePet-Field">
       <span> Breed:</span> {props.Breed}
