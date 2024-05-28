@@ -20,15 +20,7 @@ export default function Checkout () {
         zip: ""
     });
 
-    const handleOnInputchange = (e) => {
-        const { name, value } = e.target;
-        setformdata((prevFormdata) => ({ ...prevFormdata, [name]: value }));
-    };
-
-    const handleOnSubmit = async (e) => {
-    e.preventDefault();
-    // Add submit logic here
-    };
+    
 
     const navigate = useNavigate();
 
@@ -69,6 +61,52 @@ export default function Checkout () {
         })();
         
     }, [axiosInstance]);
+
+
+    useEffect(()=>{
+      let error = 0;
+      for(let item of cart){
+        if(item.quantity > item.product.quantity){
+          error += 1 ;
+         toast.error(`The order quantity of "${item.product.name}" exceeds the available stock (${item.product.quantity}).`);
+        }
+      }
+      if(error > 0){
+        navigate('/cart');
+      }
+    }, [cart])
+
+
+
+    const handleOnInputchange = (e) => {
+      const { name, value } = e.target;
+      setformdata((prevFormdata) => ({ ...prevFormdata, [name]: value }));
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const errors = "";
+
+    for(let item of cart){
+      let data = {
+        productId:item.product._id,
+        quantity:item.quantity,
+        customerName: `${formdata.firstName} ${formdata.lastName}`,
+        email: formdata.email,
+        mobileNumber: formdata.phno,
+        address: `${formdata.address}, ${formdata.state}, ${formdata.country}, ${formdata.zip}`
+      }
+      console.log(item);
+    }
+
+    
+
+
+
+    setIsLoading(false);
+  };
     
 
 
@@ -120,7 +158,7 @@ export default function Checkout () {
                 <div className="card-body">
                   <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                      Products {totalItems}
+                      Products {`(${totalItems})`}
                       <span>Rs {subtotal}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -318,7 +356,7 @@ export default function Checkout () {
                     </div>
 
                     <button className="w-100 btn btn-primary" type="submit">
-                      Continue to checkout
+                      Order
                     </button>
                   </form>
                 </div>

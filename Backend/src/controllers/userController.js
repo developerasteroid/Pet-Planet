@@ -4,6 +4,7 @@ const Food = require('./../models/foodModel');
 const Accessory = require('./../models/accessoryModel');
 const Cart = require('./../models/cartModel');
 const CartItem = require('./../models/cartItemModel');
+const Order = require('./../models/orderModel');
 const mongoose = require('mongoose');
 
 
@@ -263,8 +264,67 @@ const getCartItems = async(req, res) => {
 
 const orderProduct = async(req, res) => {
     try {
-        const userId = req.params.userId
-        const {} = req.body;
+        const userId = req.params._id
+        const {productId, quantity, customerName, mobileNumber, email, address} = req.body;
+
+        if(!productId){
+            return res.status(400).json({message: 'Product id is missing.'});
+        }
+        if(!quantity){
+            return res.status(400).json({message: 'quantity is missing.'});
+        }
+        if(!customerName){
+            return res.status(400).json({message: 'Customer name is missing.'});
+        }
+        if(!mobileNumber){
+            return res.status(400).json({message: 'Mobile Number is missing.'});
+        }
+        if(!email){
+            return res.status(400).json({message: 'Email is missing.'});
+        }
+        if(!address){
+            return res.status(400).json({message: 'Address is missing.'});
+        }
+        if(quantity < 1){
+            return res.status(400).json({message: 'quantity should be greater then 0.'});
+        }
+
+        const product = await Product.findById(productId);
+
+        if(!product){
+            return res.status(404).json({message: 'Product does not exist.'});
+        }
+        let gender = null;
+        let productType = null;
+        let companyName = null;
+        if(product.category == 'pet'){
+            const pet = await Pet.findById(product.informationId);
+            if(!pet){
+                return res.status(404).json({message: 'Product does not exist.'});
+            }
+            gender = pet.gender;
+            productType = pet.breed;
+        } else if(product.category == 'food'){
+            const food = await Food.findById(product.informationId);
+            if(!food){
+                return res.status(404).json({message: 'Product does not exist.'});
+            }
+            productType = food.type;
+            companyName = food.companyName;
+        } else if(product.category == 'accessory'){
+            const accessory = await Accessory.findById(product.informationId);
+            if(!accessory){
+                return res.status(404).json({message: 'Product does not exist.'});
+            }
+            productType = accessory.type;
+            companyName = accessory.companyName;
+        }
+
+        let totalAmount = quantity * product.price;
+        const order = new Order({user: userId, customerName, customerNumber:mobileNumber, customerEmail: email, product: productId, seller: product.seller, productTitle: product.name, productCategory:product.category, photo:product.photo, gender, productType, companyName, quantity, weight: product.weight, totalAmount, paymentMode:"cash on delivery", address});
+        await order.save();
+
+        res.status(200).json({message:"product ordered successfully"});
 
     } catch (error){
         console.error('Error in orderProduct:', error);
@@ -275,4 +335,4 @@ const orderProduct = async(req, res) => {
 
 
 
-module.exports = {getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems};
+module.exports = {getProducts, getProductInfo, addItemToCart, removeItemFromCart, getCartItems, orderProduct};
