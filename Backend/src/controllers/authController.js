@@ -244,6 +244,10 @@ const LoginSeller = async(req, res) => {
             return res.status(403).json({ message: 'Seller account is not yet approved' });
         }
 
+        if(seller.isBlocked){
+            return res.status(403).json({ message: 'Your account have been blocked' });
+        }
+
         // Generate JWT token
         const token = jwt.sign({ _id: seller._id, type: "seller" }, process.env.jwt_secret, { expiresIn: '2h' });
 

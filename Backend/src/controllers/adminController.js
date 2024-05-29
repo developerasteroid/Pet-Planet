@@ -1,5 +1,8 @@
 const { BASE_URL, LOGIN_PAGE_ADDRESS } = require('../constants');
 const Seller = require('./../models/sellerModel');
+const Product = require('./../models/productModel');
+const CartItem = require('./../models/cartItemModel');
+const Order = require('./../models/orderModel');
 const path = require('path');
 const { SendMail } = require('./authController');
 const fs = require('fs').promises;
@@ -191,12 +194,41 @@ const blockSeller = async(req, res) => {
             return res.status(404).json({ message: 'Seller not found'});
         }
 
+        const sellerProducts = await Product.find({seller: sellerId});
+
+        const productsId = sellerProducts.map(item=> item._id);
+        
+        await CartItem.deleteMany({product: {$in: productsId}});
+
+        const orders = await Order.updateMany({seller: sellerId, status: {$in: ['pending', 'processing', 'out for delivery']}}, {status: 'cancelled'}, {new: false});
+
+        console.log(orders);
+        for(let order of orders){
+            if(order.status != 'pending'){
+                const html = `
+                <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
+                <h2>Pet Planet</h2>
+                <hr/>
+                <h4>Your order (${order.productTitle}) have been cancelled due to blocking of seller</h4>
+                <p>Order id: ${order._id}</p>
+                </div>
+                `;
+                SendMail(process.env.EMAIL, seller.email, "Your Account got blocked", html)
+                .then((value)=>{
+                    
+                })
+                .catch((error)=>{
+                    console.error('Error sending mail for seller blocked: ', error);
+                });
+            }
+        }
+
         const html = `
         <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
         <h2>Pet Planet</h2>
         <hr/>
         <h4>Your Seller account have been blocked by Admin</h4>
-        <p>Contact admin to unblock you account</p>
+        <p>Contact admin to unblock your account</p>
         </div>
         `;
         SendMail(process.env.EMAIL, seller.email, "Your Account got blocked", html)
@@ -208,7 +240,7 @@ const blockSeller = async(req, res) => {
         });
 
 
-        res.json({ message: 'Seller blocked'});
+        res.json({ message: 'Seller blocked Successfully'});
 
     } catch (error) {
         console.error('Error in blockSeller:', error);
@@ -217,4 +249,45 @@ const blockSeller = async(req, res) => {
 }
 
 
-module.exports = {getNewRegisteredSeller, getSellerProfileForAdmin, updateApprovalRegisteredSeller, getApprovedSeller, blockSeller}
+const unblockSeller = async(req, res) => {
+    try {
+        const { sellerId } = req.body;
+        if(!sellerId){
+            return res.status(400).json({message:'seller id is missing'});
+        }
+        if(!mongoose.Types.ObjectId.isValid(sellerId)){
+            return res.status(400).json({ message: 'Invalid seller Id' });
+        }
+
+        const seller = await Seller.findByIdAndUpdate(sellerId, {isBlocked: false});
+        if(!seller){
+            return res.status(404).json({ message: 'Seller not found'});
+        }
+
+        const html = `
+        <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
+        <h2>Pet Planet</h2>
+        <hr/>
+        <h4>Your Seller account have been unblocked</h4>
+        <p>For further support contact admin</p>
+        </div>
+        `;
+        SendMail(process.env.EMAIL, seller.email, "Your Account got unblocked", html)
+        .then((value)=>{
+            
+        })
+        .catch((error)=>{
+            console.error('Error sending mail for seller unblocked: ', error);
+        });
+
+
+        res.json({ message: 'Seller unblocked Successfully'});
+
+    } catch (error) {
+        console.error('Error in unblockSeller:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+module.exports = {getNewRegisteredSeller, getSellerProfileForAdmin, updateApprovalRegisteredSeller, getApprovedSeller, blockSeller, unblockSeller}
