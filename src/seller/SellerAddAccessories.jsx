@@ -43,8 +43,10 @@ const SellerAddAccessories = () => {
         toast.error('Invalid Quantity Value');
         return;
       }
+
+      const pricePerPiece = 50;
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: `Pay ${ pricePerPiece * formData.quantity}Rs`,
         text: 'Are you sure you want to sell this product?',
         imageUrl: qr, // Use the imported image here
         imageWidth: 400,
