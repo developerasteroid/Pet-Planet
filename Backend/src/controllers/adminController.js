@@ -3,6 +3,7 @@ const Seller = require('./../models/sellerModel');
 const path = require('path');
 const { SendMail } = require('./authController');
 const fs = require('fs').promises;
+const mongoose = require('mongoose');
 
 
 
@@ -145,4 +146,75 @@ const getSellerProfileForAdmin = async(req, res) => {
 }
 
 
-module.exports = {getNewRegisteredSeller, getSellerProfileForAdmin, updateApprovalRegisteredSeller}
+const getApprovedSeller = async(req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        let sellers = await Seller.find({isApproved:true});
+
+        let data = [];
+        if(sellers){
+            sellers.forEach((seller) => {
+                data.push({
+                    _id: seller._id,
+                    fullName: seller.fullName,
+                    shopName: seller.shopName,
+                    email:seller.email,
+                    dateOfBirth:seller.dateOfBirth,
+                    mobileNumber:seller.mobileNumber,
+                    adharNumber:seller.adharNumber,
+                    isBlocked:seller.isBlocked,
+                    bankAccountNumber:seller.bankAccountNumber,
+                    profileImageUrl:`${BASE_URL}/api/admin/seller/profile/image/${token}/${seller.profileImageUrl}`
+                })
+            })
+        }
+        
+        res.json(data);
+    } catch (error) {
+        console.error('Error in getApprovedSeller:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+const blockSeller = async(req, res) => {
+    try {
+        const { sellerId } = req.body;
+        if(!sellerId){
+            return res.status(400).json({message:'seller id is missing'});
+        }
+        if(!mongoose.Types.ObjectId.isValid(sellerId)){
+            return res.status(400).json({ message: 'Invalid seller Id' });
+        }
+
+        const seller = await Seller.findByIdAndUpdate(sellerId, {isBlocked: true});
+        if(!seller){
+            return res.status(404).json({ message: 'Seller not found'});
+        }
+
+        const html = `
+        <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
+        <h2>Pet Planet</h2>
+        <hr/>
+        <h4>Your Seller account have been blocked by Admin</h4>
+        <p>Contact admin to unblock you account</p>
+        </div>
+        `;
+        SendMail(process.env.EMAIL, seller.email, "Your Account got blocked", html)
+        .then((value)=>{
+            
+        })
+        .catch((error)=>{
+            console.error('Error sending mail for seller blocked: ', error);
+        });
+
+
+        res.json({ message: 'Seller blocked'});
+
+    } catch (error) {
+        console.error('Error in blockSeller:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+module.exports = {getNewRegisteredSeller, getSellerProfileForAdmin, updateApprovalRegisteredSeller, getApprovedSeller, blockSeller}
