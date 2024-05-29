@@ -200,27 +200,29 @@ const blockSeller = async(req, res) => {
         
         await CartItem.deleteMany({product: {$in: productsId}});
 
-        const orders = await Order.updateMany({seller: sellerId, status: {$in: ['pending', 'processing', 'out for delivery']}}, {status: 'cancelled'}, {new: false});
+        const orders = await Order.find({seller: sellerId, status: {$in: ['pending', 'processing', 'out for delivery']}});
 
-        console.log(orders);
+        await Order.updateMany({seller: sellerId, status: {$in: ['pending', 'processing', 'out for delivery']}}, {status: 'cancelled'});
+
         for(let order of orders){
-            if(order.status != 'pending'){
+                await Product.findByIdAndUpdate(order.product, {$inc:{quantity: order.quantity}});
+
                 const html = `
                 <div style="border:1px solid #000000; margin:10px; padding:10px; text-align:center;">
                 <h2>Pet Planet</h2>
                 <hr/>
-                <h4>Your order (${order.productTitle}) have been cancelled due to blocking of seller</h4>
+                <h4>Your order (${order.productTitle}) has been cancelled because the seller of this product was blocked by the platform.</h4>
                 <p>Order id: ${order._id}</p>
                 </div>
                 `;
-                SendMail(process.env.EMAIL, seller.email, "Your Account got blocked", html)
+                SendMail(process.env.EMAIL, order.customerEmail, `order cancelled - ${order._id}`, html)
                 .then((value)=>{
                     
                 })
                 .catch((error)=>{
                     console.error('Error sending mail for seller blocked: ', error);
                 });
-            }
+            
         }
 
         const html = `
