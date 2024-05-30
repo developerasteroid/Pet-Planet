@@ -3,11 +3,15 @@ import './css/SellerManagePetComponent.css';
 import sellerAxiosInstance from '../helper/sellerAxios';
 import {useNavigate} from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2'
+import qr from './assets/qr.jpg'
 
 const SellerManagePetAcceComponent = (props) => {
 
     
   const [isChanged, setIsChanged] = useState(false);
+  const [quantity, setQuantity] = useState(props.Quantity);
+
   const [data, setData] = useState({
     Quantity: props.Quantity || 0,
     Weight: props.Weight || 0,
@@ -27,6 +31,40 @@ const SellerManagePetAcceComponent = (props) => {
       const isConfirmed = window.confirm('Are you sure you want to edit this product');
 
       if (isConfirmed) {
+        if(data.Quantity > quantity){
+
+          const pricePerPiece = 50;
+  
+          const result = await Swal.fire({
+            title: `Pay ${ pricePerPiece * (data.Quantity - quantity)}Rs`,
+            text: 'Are you sure you want to update this product?',
+            imageUrl: qr, // Use the imported image here
+            imageWidth: 400,
+            imageHeight: 200,
+            imageAlt: 'Custom image',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Update Product!',
+            cancelButtonText: 'No, cancel!',
+            input: 'text',
+            inputLabel: 'Transaction ID',
+            inputPlaceholder: 'Enter Transaction ID',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'You need to enter the Transaction ID!';
+                }
+            },
+            preConfirm: (value) => {
+                if (!value) {
+                    Swal.showValidationMessage('Transaction ID is required');
+                }
+                return value;
+            }
+            });
+            if (!result.isConfirmed){
+              return;
+            }
+  
+          }
         setIsChanged(false);
         try{
           const response = await sellerAxiosInstance.post('api/seller/update/product',{productId:props.id, quantity: data.Quantity, price: data.Price});
@@ -34,6 +72,8 @@ const SellerManagePetAcceComponent = (props) => {
           if(response.status == 200){
             toast.success("Product updated successfully");
             setIsChanged(false);
+            setQuantity(data.Quantity);
+
           }
         }
         catch (error) {
