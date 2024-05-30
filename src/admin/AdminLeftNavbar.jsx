@@ -13,9 +13,6 @@ const LeftNavbar = () => {
       <div className="Adminnav-contents" onClick={()=>{navigate('manage/sellers')}}>
         <div className="Admincontent">Manage Sellers</div>
       </div>
-      <div className="Adminnav-contents">
-        <div className="Admincontent">Manage Customer</div>
-      </div>
       <div className="Adminnav-contents" onClick={()=>{navigate('orders/delivered')}}>
         <div className="Admincontent">Orders delivered</div>
       </div>
