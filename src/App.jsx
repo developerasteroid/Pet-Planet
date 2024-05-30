@@ -17,7 +17,7 @@ import SellerOrderRequestManagePage from './seller/manageOrderRequest/SellerOrde
 import ManageOrders from './seller/manageOrderStatus/ManageOrders'
 import ProductsSoldPage from './seller/soldHistory/ProductsSoldPage';
 import AdminSellerNewRequest from './admin/AdminSellerNewRequest';
-import ManageSellers from './admin/manageSellers/ManageSellers';
+// import ManageSellers from './admin/manageSellers/ManageSellers';
 import OrdersDelivered from './admin/ordersDelivered/OrdersDelivered';
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
       <Route path='/seller/login' element={<SellerLogin/>}/>
       <Route path='/admin' element={<Admin/>}>
         <Route path='' element={<AdminSellerNewRequest/>}/>
-        <Route path='manage/sellers' element={<ManageSellers/>}/>
+        {/* <Route path='manage/sellers' element={<ManageSellers/>}/> */}
         <Route path='orders/delivered' element={<OrdersDelivered/>}/>
       </Route>
       <Route path='/admin/login' element={<AdminLogin/>}/>
@@ -59,3 +59,11 @@ function App() {
 }
 
 export default App
+
+// cd Backend
+// npm run server
+//--------------------
+// cd Client
+// npm start
+//--------------------
+// npm run dev

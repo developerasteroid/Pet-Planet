@@ -16,7 +16,7 @@ const LeftNavbar = () => {
         <div className="content">Manage Order Request</div>
       </div>
       <div className="nav-contents" onClick={()=>{navigate('manage/orders')}}>
-        <div className="content" >Manage Orders</div>
+        <div className="content" >Manage Order Status</div>
       </div>
       <div className="nav-contents" onClick={()=>{navigate('soldhistory')}}>
         <div className="content">Sold History</div>

@@ -4,6 +4,7 @@ import FoodDelivered from './FoodDelivered'
 import AccessoryDelivered from './AccessoryDelivered'
 import { toast } from 'react-toastify'
 import sellerAxiosInstance from '../../helper/sellerAxios'
+import adminAxiosInstance from '../../helper/adminAxios'
 
 const OrdersDelivered = () => {
   const [soldorders, setSoldOrders] = useState([]);
@@ -12,8 +13,9 @@ const OrdersDelivered = () => {
 
     (async()=>{
       try {
-        const response = await sellerAxiosInstance.get('api/seller/get/order/sold');
+        const response = await adminAxiosInstance.get('api/admin/seller/sold/history');
         if(response.status == 200 && response.data){
+          
           console.log(response.data);
           setSoldOrders(response.data);
         }
