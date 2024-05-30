@@ -291,5 +291,28 @@ const unblockSeller = async(req, res) => {
     }
 }
 
+const getSellerSoldHistory = async(req, res) => {
+    try {
+        // const seller = req.params._id;
 
-module.exports = {getNewRegisteredSeller, getSellerProfileForAdmin, updateApprovalRegisteredSeller, getApprovedSeller, blockSeller, unblockSeller}
+        const orders = await Order.find({ status: 'delivered'}).populate('seller').sort({orderDate: -1});
+
+        const data = orders.map(item => {
+            return {
+                ...item.toObject(),
+                otp: null,
+                photo: `${process.env.HOST}/image/product/${item.photo}`
+            };
+        });
+
+
+        res.json(data);
+
+    } catch(error) {
+        console.error('Error in getSellerSoldHistory:', error);
+        res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+module.exports = {getNewRegisteredSeller, getSellerProfileForAdmin, updateApprovalRegisteredSeller, getApprovedSeller, blockSeller, unblockSeller, getSellerSoldHistory}
